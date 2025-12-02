@@ -1,4 +1,4 @@
-# Sistema-de-Notificacao-e-Mensageria
+# Sistema de Notificação e Mensageria [Event-driven & Serveless]
   
 ## 🎯 Objetivo
 
