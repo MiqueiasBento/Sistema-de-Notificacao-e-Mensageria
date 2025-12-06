@@ -1,0 +1,29 @@
+@startuml HelpDesk_Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Title HelpDesk — Context Diagram
+
+Person(user, "Usuário cliente", "Abre tickets e recebe notificações")
+Person(agent, "Agente / Técnico", "Atende e recebe notificações")
+Person(admin, "Administrador", "Gerencia templates, reprocessa DLQ")
+System_Ext(emailProvider, "SES / SMTP", "Serviço de envio de e-mail")
+System_Ext(pushProvider, "FCM / APNs", "Serviço de push")
+System_Ext(auth, "Auth (Cognito / JWT)", "Autenticação")
+System(system, "HelpDesk (Notificação e Mensageria)", "Sistema event-driven para notificações e mensageria. Veja docs. ")
+
+Rel(user, system, "Cria ticket / visualiza logs (HTTP)")
+Rel(agent, system, "Recebe notificações / usa Admin UI")
+Rel(admin, system, "Administra templates / reprocessa DLQ")
+Rel(system, emailProvider, "Envia e-mails via SES")
+Rel(system, pushProvider, "Envia push via FCM/APNs")
+Rel(system, auth, "Valida tokens / autenticação")
+
+Note as N1
+**Nível de detalhes:**
+- Nenhum detalhe técnico específico.
+- Não mostra APIs, tabelas, filas ou Lambdas.
+- Não mostra módulos internos.
+- Apenas "pessoas ↔ sistema ↔ outros sistemas".
+End note
+
+@enduml
