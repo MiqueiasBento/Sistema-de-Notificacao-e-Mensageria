@@ -1,0 +1,39 @@
+@startuml HelpDesk_Containers
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Title HelpDesk — Container Diagram
+
+Person(user, "Usuário cliente")
+Person(agent, "Agente / Técnico")
+Person(admin, "Administrador")
+
+System_Boundary(system, "HelpDesk") {
+  Container(frontend, "Frontend (React)", "React", "UI para usuários e admins")
+  Container(producer, "Producer API", "Spring Boot / Node.js", "Expondo endpoints REST; publica events em SQS")
+  Container(sqs, "Broker (SQS)", "AWS SQS", "Fila de eventos notifications-queue")
+  Container(lambdaRouter, "Ingest/Router Lambda", "Lambda (Node.js/Python)", "Valida eventos, enfileira para processors")
+  Container(processorEmail, "Processor-email Lambda", "Lambda", "Renderiza template e envia via SES")
+  Container(processorPush, "Processor-push Lambda", "Lambda", "Monta payload e envia via FCM")
+  Container(db, "DynamoDB", "NoSQL", "Templates, Notification logs, processedEventIds (idempotência)")
+  Container(obs, "Observability", "CloudWatch / X-Ray", "Logs, métricas, traces")
+}
+
+Rel(user, frontend, "Usa UI (HTTP)")
+Rel(frontend, producer, "POST /tickets (HTTP)")
+Rel(producer, sqs, "Publica TicketCreated (SQS)")
+Rel(sqs, lambdaRouter, "Trigger -> entrega mensagens")
+Rel(lambdaRouter, db, "Consulta / grava (idempotência, templates)")
+Rel(lambdaRouter, processorEmail, "Enfileira / chama")
+Rel(processorEmail, db, "Grava Notification e deliveryLog")
+Rel(processorEmail, obs, "Logs / metrics")
+Rel(processorPush, obs, "Logs / metrics")
+Rel(producer, auth, "Valida JWT (Auth)")
+
+Note as N1
+**Nível de detalhes:**
+- Não entra em código ou classes.
+- Não entra em algoritmos.
+- Mostra arquitetura técnica, não implementação.
+end note
+
+@enduml
