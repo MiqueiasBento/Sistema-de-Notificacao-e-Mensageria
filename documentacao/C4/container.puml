@@ -17,6 +17,7 @@ System_Boundary(system, "HelpDesk") {
   Container(db, "DynamoDB", "NoSQL", "Templates, Notification logs, processedEventIds (idempotência)")
   Container(obs, "Observability", "CloudWatch / X-Ray", "Logs, métricas, traces")
 }
+System_Ext(auth, "Auth (Cognito / JWT)", "Autenticação")
 
 Rel(user, frontend, "Usa UI (HTTP)")
 Rel(frontend, producer, "POST /tickets (HTTP)")
@@ -24,16 +25,10 @@ Rel(producer, sqs, "Publica TicketCreated (SQS)")
 Rel(sqs, lambdaRouter, "Trigger -> entrega mensagens")
 Rel(lambdaRouter, db, "Consulta / grava (idempotência, templates)")
 Rel(lambdaRouter, processorEmail, "Enfileira / chama")
+Rel(lambdaRouter, processorPush, "Enfileira / chama")
 Rel(processorEmail, db, "Grava Notification e deliveryLog")
 Rel(processorEmail, obs, "Logs / metrics")
 Rel(processorPush, obs, "Logs / metrics")
 Rel(producer, auth, "Valida JWT (Auth)")
-
-Note as N1
-**Nível de detalhes:**
-- Não entra em código ou classes.
-- Não entra em algoritmos.
-- Mostra arquitetura técnica, não implementação.
-end note
 
 @enduml
