@@ -1,7 +1,7 @@
 @startuml HelpDesk_Containers
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
-Title HelpDesk — Container Diagram
+title Diagrama de Container (Nível 2) - Sistema de Notificação e Mensageria
 
 Person(user, "Usuário", "Abre tickets e recebe notificações")
 

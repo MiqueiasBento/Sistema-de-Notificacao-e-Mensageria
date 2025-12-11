@@ -1,7 +1,7 @@
 @startuml HelpDesk_Context
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-Title HelpDesk — Context Diagram
+title Diagrama de Contexto (Nível 1) - Sistema de Notificação e Mensageria
 
 Person(user, "Usuário cliente", "Abre tickets e recebe notificações")
 Person(agent, "Agente / Técnico", "Atende e recebe notificações")
