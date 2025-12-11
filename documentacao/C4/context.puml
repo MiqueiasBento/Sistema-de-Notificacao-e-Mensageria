@@ -5,7 +5,7 @@ Title HelpDesk — Context Diagram
 
 Person(user, "Usuário cliente", "Abre tickets e recebe notificações")
 Person(agent, "Agente / Técnico", "Atende e recebe notificações")
-Person(admin, "Administrador", "Gerencia templates, reprocessa DLQ")
+Person(admin, "Administrador", "Gerencia templates, reprocessa falhas")
 System_Ext(emailProvider, "SES / SMTP", "Serviço de envio de e-mail")
 System_Ext(pushProvider, "FCM / APNs", "Serviço de push")
 System_Ext(auth, "Auth (Cognito / JWT)", "Autenticação")
@@ -13,7 +13,7 @@ System(system, "HelpDesk (Notificação e Mensageria)", "Sistema event-driven pa
 
 Rel(user, system, "Cria ticket / visualiza logs (HTTP)")
 Rel(agent, system, "Recebe notificações / usa Admin UI")
-Rel(admin, system, "Administra templates / reprocessa DLQ")
+Rel(admin, system, "Administra reenvios")
 Rel(system, emailProvider, "Envia e-mails via SES")
 Rel(system, pushProvider, "Envia push via FCM/APNs")
 Rel(system, auth, "Valida tokens / autenticação")
@@ -24,6 +24,21 @@ Note as N1
 - Não mostra APIs, tabelas, filas ou Lambdas.
 - Não mostra módulos internos.
 - Apenas "pessoas ↔ sistema ↔ outros sistemas".
+End note
+
+Note as N2
+**Amazon SES:**
+O Amazon SES (Simple Email Service) é um serviço de nuvem da Amazon Web Services (AWS) que permite enviar e receber e-mails em grande volume de forma barata e escalável
+End note
+
+Note as N3
+**FCM / APNs:**
+O FCM (Firebase Cloud Messaging) e APNs (Apple Push Notification service) são serviços de notificação de push da Google e da Apple, respectivamente. Eles permitem enviar notificações de push para dispositivos móveis e desktops.
+End note
+
+Note as N4
+**AWS Cognito:**
+O AWS Cognito é um serviço de autenticação e gerenciamento de identidade da AWS que permite autenticar e gerenciar usuários e identidades em aplicações web e móveis.
 End note
 
 @enduml
