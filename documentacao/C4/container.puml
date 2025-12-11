@@ -3,32 +3,24 @@
 
 Title HelpDesk — Container Diagram
 
-Person(user, "Usuário cliente")
-Person(agent, "Agente / Técnico")
-Person(admin, "Administrador")
+Person(user, "Usuário", "Abre tickets e recebe notificações")
 
-System_Boundary(system, "HelpDesk") {
-  Container(frontend, "Frontend (React)", "React", "UI para usuários e admins")
-  Container(producer, "Producer API", "Spring Boot / Node.js", "Expondo endpoints REST; publica events em SQS")
-  Container(sqs, "Broker (SQS)", "AWS SQS", "Fila de eventos notifications-queue")
-  Container(lambdaRouter, "Ingest/Router Lambda", "Lambda (Node.js/Python)", "Valida eventos, enfileira para processors")
-  Container(processorEmail, "Processor-email Lambda", "Lambda", "Renderiza template e envia via SES")
-  Container(processorPush, "Processor-push Lambda", "Lambda", "Monta payload e envia via FCM")
-  Container(db, "DynamoDB", "NoSQL", "Templates, Notification logs, processedEventIds (idempotência)")
-  Container(obs, "Observability", "CloudWatch / X-Ray", "Logs, métricas, traces")
+System_Boundary(system, "Notification System") {
+  Container(UI, "UI", "React.js", "UI para usuários e administradores")
+  Container(producer, "Producer API", "Spring Boot / Node.js", "Exposes REST endpoints and publishes events")
+  Container(sqs, "Broker (SQS)", "AWS SQS", "Gerencia a fila de mensagens.")
+  Container(notificationProcessor, "Notification Processor", "Lambda (Node.js/Python)", "Processa eventos e envia notificações por e-mail e push.")
+  Container(db, "DynamoDB", "NoSQL", "Armazena modelos e registros de notificações.")
+  Container(obs, "Observability", "CloudWatch / X-Ray", "Fornece registros, métricas e rastreamento.")
 }
-System_Ext(auth, "Auth (Cognito / JWT)", "Autenticação")
+System_Ext(auth, "Auth (Cognito / JWT)", "Serviço de autenticação")
 
-Rel(user, frontend, "Usa UI (HTTP)")
-Rel(frontend, producer, "POST /tickets (HTTP)")
-Rel(producer, sqs, "Publica TicketCreated (SQS)")
-Rel(sqs, lambdaRouter, "Trigger -> entrega mensagens")
-Rel(lambdaRouter, db, "Consulta / grava (idempotência, templates)")
-Rel(lambdaRouter, processorEmail, "Enfileira / chama")
-Rel(lambdaRouter, processorPush, "Enfileira / chama")
-Rel(processorEmail, db, "Grava Notification e deliveryLog")
-Rel(processorEmail, obs, "Logs / metrics")
-Rel(processorPush, obs, "Logs / metrics")
-Rel(producer, auth, "Valida JWT (Auth)")
+Rel(user, UI , "Visualiza e gerencia seus chamados.")
+Rel(UI, producer, "Solicita informações por meio de chamados.", "JSON/HTTPS")
+Rel(producer, sqs, "Publica eventos (SQS)")
+Rel(sqs, notificationProcessor, "Aciona o processamento")
+Rel(notificationProcessor, db, "Lê e escreve em modelos e registros")
+Rel(notificationProcessor, obs, "Envia registros e métricas.")
+Rel(producer, auth, "Valida tokens / autenticação")
 
 @enduml
