@@ -1,0 +1,77 @@
+@startuml C4_Component_Diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de Componentes (Nível 3) - Sistema de Notificação e Mensageria
+' versão v1.0
+
+Container(spa, "Single Page Application", "React", "Interface para envio e gerenciamento de templates e tickets") {
+    Component(auth_comp, "Auth Component", "React Context/Hook", "Gerencia login/logout e armazena JWT")
+    Component(api_client, "API Client", "Axios/Fetch", "Encapsula chamadas HTTP para a API")
+    Component(tickets_mod, "Tickets Module", "React Component", "Tela e lógica para criação de tickets")
+    Component(notif_mod, "Notification Module", "React Component", "Histórico de notificações")
+    Component(admin_mod, "Admin Module", "React Component", "Gerencia templates e reprocessamento DLQ")
+}
+
+Container(producer_api, "Producer API", "Node.js/Express/Spring", "API Rest que recebe requisições e publica eventos") {
+    Component(auth_middleware, "JWT Middleware", "Middleware", "Valida token JWT e roles")
+    Component(ticket_controller, "Ticket Controller", "Controller", "Recebe POST /tickets")
+    Component(admin_controller, "Admin Controller", "Controller", "Rotas de templates e DLQ")
+    Component(event_publisher, "EventPublisher Service", "Service", "Publica eventos na fila SQS")
+    Component(template_service, "Template Service", "Service", "CRUD de templates")
+    Component(log_service, "NotificationLog Service", "Service", "Leitura de logs")
+}
+
+Container(processor, "Notification Processor", "AWS Lambda", "Processa eventos e envia notificações") {
+    Component(router_handler, "Router Handler", "Function", "Roteamento e validação de idempotência")
+    Component(idempotency_svc, "Idempotency Service", "Function", "Checa eventos processados")
+    Component(template_loader, "Template Loader", "Function", "Carrega templates do DB")
+    Component(email_proc, "Email Processor", "Function", "Prepara e envia emails (SES)")
+    Component(push_proc, "Push Processor", "Function", "Prepara e envia Push requests (FCM)")
+    Component(del_logger, "Delivery Logger", "Function", "Registra resultado do envio")
+}
+
+ContainerDb(dynamo, "DynamoDB", "NoSQL Database", "Armazena dados do sistema") {
+    Component(table_templates, "Templates Table", "Table", "Armazena modelos de mensagem")
+    Component(table_logs, "NotificationLogs Table", "Table", "Logs de envio")
+    Component(table_ids, "ProcessedEventIds Table", "Table", "Ids para idempotência")
+}
+
+System_Ext(cognito, "AWS Cognito", "Gerenciamento de Identidade")
+System_Ext(sqs, "AWS SQS", "Fila de Mensagens")
+System_Ext(ses, "AWS SES", "Envio de Emails")
+System_Ext(fcm, "Firebase (FCM)", "Envio de Push Notifications")
+
+Rel(spa, cognito, "Autentica usuário", "HTTPS")
+Rel(auth_comp, api_client, "Fornece Token JWT")
+
+Rel(api_client, auth_middleware, "Envia Requests com Token", "HTTPS/JSON")
+Rel(auth_middleware, ticket_controller, "Encaminha Request")
+Rel(auth_middleware, admin_controller, "Encaminha Request")
+
+Rel(ticket_controller, event_publisher, "Solicita envio")
+Rel(admin_controller, template_service, "Gerencia Templates")
+Rel(admin_controller, log_service, "Consulta Logs")
+
+Rel(event_publisher, sqs, "Publica evento de notificação", "SQS Protocol")
+
+Rel(template_service, table_templates, "CRUD")
+Rel(log_service, table_logs, "Leitura")
+
+Rel(sqs, router_handler, "Trigger Lambda", "SQS Event")
+
+Rel(router_handler, idempotency_svc, "Verifica processamento")
+Rel(idempotency_svc, table_ids, "Lê/Escreve IDs")
+
+Rel(router_handler, template_loader, "Solicita Template")
+Rel(template_loader, table_templates, "Busca Template")
+
+Rel(router_handler, email_proc, "Delesga envio Email")
+Rel(router_handler, push_proc, "Delega envio Push")
+
+Rel(email_proc, ses, "Envia Email", "SMTP/API")
+Rel(push_proc, fcm, "Envia Push", "HTTP/API")
+
+Rel(router_handler, del_logger, "Registra Status")
+Rel(del_logger, table_logs, "Grava logs")
+
+@enduml
