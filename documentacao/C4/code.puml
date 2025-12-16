@@ -1,0 +1,149 @@
+@startuml C4_Code_Diagram
+title Diagrama de Código (Nível 4) - Estrutura Interna de Componentes Críticos
+
+' Estilo simplificado para focar na estrutura de pacotes e classes
+skinparam linetype ortho
+skinparam components {
+    FontSize 13
+    FontName Arial
+    BackgroundColor White
+    BorderColor #444444
+    ArrowColor #444444
+}
+
+package "Producer API (Node.js/Express/Spring)" {
+    
+    package "controllers" {
+        class TicketController {
+            + createTicket(req, res)
+        }
+        class AdminController {
+            + createTemplate(req, res)
+            + listLogs(req, res)
+        }
+    }
+
+    package "middleware" {
+        class JwtAuthMiddleware {
+            + verifyToken(req, res, next)
+        }
+    }
+
+    package "services" {
+        class EventPublisherService {
+            + publish(event: TicketCreatedEvent)
+        }
+        class TemplateService {
+            + create(template)
+            + getAll()
+        }
+        class NotificationLogService {
+            + getLogs(filter)
+        }
+    }
+
+    package "repositories" {
+        class TemplateRepository {
+            + save(templateData)
+            + findById(id)
+        }
+        class NotificationLogRepository {
+            + findAll(criteria)
+        }
+    }
+
+    package "dtos" {
+        class TicketCreatedEvent {
+            + ticketId: string
+            + userId: string
+            + status: string
+        }
+    }
+    
+    package "config" {
+        class AwsConfig {
+            + getSqsClient()
+            + getDynamoClient()
+        }
+    }
+
+    ' Relacionamentos Producer API
+    TicketController ..> EventPublisherService : usa
+    AdminController ..> TemplateService : usa
+    AdminController ..> NotificationLogService : usa
+    
+    EventPublisherService ..> TicketCreatedEvent : cria
+    EventPublisherService ..> AwsConfig : usa (SQS)
+    
+    TemplateService ..> TemplateRepository : usa
+    NotificationLogService ..> NotificationLogRepository : usa
+    
+    JwtAuthMiddleware -- TicketController : intercepta
+    JwtAuthMiddleware -- AdminController : intercepta
+}
+
+package "Notification Processor (AWS Lambda)" {
+
+    package "handler" {
+        class RouterHandler {
+            + handle(sqsEvent)
+        }
+    }
+
+    package "services " as LambdaServices {
+        class IdempotencyService {
+            + isProcessed(eventId)
+        }
+        class TemplateLoader {
+            + load(type)
+        }
+        class EmailProcessor {
+            + process(notification)
+        }
+        class PushProcessor {
+            + process(notification)
+        }
+        class DeliveryLogger {
+            + logSuccess(notification)
+            + logError(notification, error)
+        }
+    }
+
+    package "adapters" {
+        class SesAdapter {
+            + sendEmail(params)
+        }
+        class FcmAdapter {
+            + sendPush(params)
+        }
+        class DynamoAdapter {
+            + getItem(key)
+            + putItem(item)
+        }
+    }
+
+    package "models" {
+        class NotificationEvent {
+            + eventId: string
+            + recipient: string
+            + payload: object
+        }
+    }
+
+    ' Relacionamentos Processor
+    RouterHandler ..> IdempotencyService : valida
+    RouterHandler ..> TemplateLoader : carrega dados
+    RouterHandler ..> NotificationEvent : parse
+    RouterHandler ..> EmailProcessor : despacha
+    RouterHandler ..> PushProcessor : despacha
+    RouterHandler ..> DeliveryLogger : registra
+
+    IdempotencyService ..> DynamoAdapter : verifica ID
+    TemplateLoader ..> DynamoAdapter : busca template
+    DeliveryLogger ..> DynamoAdapter : salva log
+
+    EmailProcessor ..> SesAdapter : usa
+    PushProcessor ..> FcmAdapter : usa
+}
+
+@enduml
