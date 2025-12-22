@@ -21,12 +21,27 @@ Container(producer_api, "Producer API", "Node.js/Express/Spring", "API Rest que 
     Component(log_service, "NotificationLog Service", "Service", "Leitura de logs")
 }
 
-Container(processor, "Notification Processor", "AWS Lambda", "Processa eventos e envia notificações") {
+Container(router_container, "Router Handler", "AWS Lambda", "Roteamento e validação de idempotência") {
     Component(router_handler, "Router Handler", "Function", "Roteamento e validação de idempotência")
+}
+
+Container(idempotency_container, "Idempotency Service", "AWS Lambda", "Validação de processamento") {
     Component(idempotency_svc, "Idempotency Service", "Function", "Checa eventos processados")
+}
+
+Container(template_container, "Template Loader", "AWS Lambda", "Carregamento de templates") {
     Component(template_loader, "Template Loader", "Function", "Carrega templates do DB")
+}
+
+Container(email_container, "Email Processor", "AWS Lambda", "Processamento de emails") {
     Component(email_proc, "Email Processor", "Function", "Prepara e envia emails (SES)")
+}
+
+Container(push_container, "Push Processor", "AWS Lambda", "Processamento de push notifications") {
     Component(push_proc, "Push Processor", "Function", "Prepara e envia Push requests (FCM)")
+}
+
+Container(logger_container, "Delivery Logger", "AWS Lambda", "Registro de entrega") {
     Component(del_logger, "Delivery Logger", "Function", "Registra resultado do envio")
 }
 
@@ -65,7 +80,7 @@ Rel(idempotency_svc, table_ids, "Lê/Escreve IDs")
 Rel(router_handler, template_loader, "Solicita Template")
 Rel(template_loader, table_templates, "Busca Template")
 
-Rel(router_handler, email_proc, "Delesga envio Email")
+Rel(router_handler, email_proc, "Delega envio Email")
 Rel(router_handler, push_proc, "Delega envio Push")
 
 Rel(email_proc, ses, "Envia Email", "SMTP/API")
