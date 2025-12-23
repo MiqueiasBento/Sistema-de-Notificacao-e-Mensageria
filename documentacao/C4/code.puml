@@ -1,7 +1,21 @@
 @startuml C4_Code_Diagram
-title Diagrama de Código (Nível 4) - Estrutura Interna de Componentes Críticos
 
-' Estilo simplificado para focar na estrutura de pacotes e classes
+title Diagrama de Código (Nível 4) - Sistema de Notificação e Mensageria
+
+' Um componente costuma aparecer no diagrama de código quando ele:
+' - Contém lógica de negócio relevante
+' - Possui estrutura interna não trivial
+' - Orquestra fluxos importantes
+' - Interage com múltiplas dependências
+' - É arquiteturalmente crítico
+
+' Componentes que não entram geralmente são:
+' - UI
+' - Adaptadores simples
+' - Wrappers
+' - Componentes muito óbvios ou triviais
+
+' Inclui o diagrama de componentes para referência
 skinparam linetype ortho
 skinparam components {
     FontSize 13
@@ -10,140 +24,173 @@ skinparam components {
     BorderColor #444444
     ArrowColor #444444
 }
+skinparam package {
+    BackgroundColor White
+    BorderColor #888888
+}
+skinparam class {
+    BackgroundColor White
+    BorderColor #444444
+    ArrowColor #444444
+}
 
-package "Producer API (Node.js/Express/Spring)" {
+' Stereotypes styles for clarity
+skinparam class<<Domain>> {
+    BackgroundColor #E1F5FE
+    BorderColor #0277BD
+}
+skinparam class<<Infrastructure>> {
+    BackgroundColor #FBE9E7
+    BorderColor #D84315
+}
+skinparam class<<CrossCutting>> {
+    BackgroundColor #FFF3E0
+    BorderColor #EF6C00
+}
+
+package "Producer API (Container)" {
     
-    package "controllers" {
+    package "Ticket Module (Component)" {
         class TicketController {
             + createTicket(req, res)
         }
+        
+        class EventPublisherService {
+            + publish(event: TicketCreatedEvent)
+        }
+        
+        class TicketCreatedEvent <<Domain>> {
+            + ticketId: string
+            + userId: string
+            + status: string
+            + message: string
+        }
+
+        class JwtAuthMiddleware <<CrossCutting>> {
+            + verifyToken(req, res, next)
+        }
+        note right of JwtAuthMiddleware : Componente transversal (Segurança)
+
+        ' Relacionamentos Internos
+        TicketController ..> EventPublisherService
+        EventPublisherService ..> TicketCreatedEvent : <<publishes>>
+        JwtAuthMiddleware -- TicketController : intercepts
+    }
+
+    package "Admin Module (Component)" {
         class AdminController {
             + createTemplate(req, res)
             + listLogs(req, res)
         }
-    }
 
-    package "middleware" {
-        class JwtAuthMiddleware {
-            + verifyToken(req, res, next)
-        }
-    }
-
-    package "services" {
-        class EventPublisherService {
-            + publish(event: TicketCreatedEvent)
-        }
         class TemplateService {
             + create(template)
             + getAll()
         }
-        class NotificationLogService {
-            + getLogs(filter)
-        }
-    }
 
-    package "repositories" {
-        class TemplateRepository {
+        class TemplateRepository <<Infrastructure>> {
             + save(templateData)
             + findById(id)
         }
-        class NotificationLogRepository {
+
+        class NotificationLogService {
+            + getLogs(filter)
+        }
+
+        class NotificationLogRepository <<Infrastructure>> {
             + findAll(criteria)
         }
+
+        ' Relacionamentos Internos
+        AdminController ..> TemplateService
+        AdminController ..> NotificationLogService
+        TemplateService ..> TemplateRepository
+        NotificationLogService ..> NotificationLogRepository
     }
 
-    package "dtos" {
-        class TicketCreatedEvent {
-            + ticketId: string
-            + userId: string
-            + status: string
-        }
-    }
-    
-    package "config" {
-        class AwsConfig {
+    package "Shared / Config" {
+        class AwsConfig <<Infrastructure>> {
             + getSqsClient()
             + getDynamoClient()
         }
     }
 
-    ' Relacionamentos Producer API
-    TicketController ..> EventPublisherService : usa
-    AdminController ..> TemplateService : usa
-    AdminController ..> NotificationLogService : usa
-    
-    EventPublisherService ..> TicketCreatedEvent : cria
+    ' Dependências de Infraestrutura
     EventPublisherService ..> AwsConfig : usa (SQS)
-    
-    TemplateService ..> TemplateRepository : usa
-    NotificationLogService ..> NotificationLogRepository : usa
-    
-    JwtAuthMiddleware -- TicketController : intercepta
-    JwtAuthMiddleware -- AdminController : intercepta
 }
 
-package "Notification Processor (AWS Lambda)" {
+package "Notification Processor (Container)" {
 
-    package "handler" {
+    package "Router Component" {
         class RouterHandler {
             + handle(sqsEvent)
         }
-    }
 
-    package "services " as LambdaServices {
         class IdempotencyService {
             + isProcessed(eventId)
         }
+
         class TemplateLoader {
             + load(type)
         }
+
+        class NotificationEvent <<Domain>> {
+            + eventId: string
+            + recipient: string
+            + payload: object
+        }
+
+        ' Relacionamentos Router
+        RouterHandler ..> IdempotencyService : valida
+        RouterHandler ..> TemplateLoader : carrega dados
+        RouterHandler ..> NotificationEvent : parse <<consumes>>
+    }
+
+    package "Channel Processors" {
         class EmailProcessor {
             + process(notification)
         }
+        
         class PushProcessor {
             + process(notification)
         }
+        
+        class SesAdapter <<Infrastructure>> {
+            + sendEmail(params)
+        }
+        
+        class FcmAdapter <<Infrastructure>> {
+            + sendPush(params)
+        }
+
+        ' Relacionamentos Processors
+        EmailProcessor ..> SesAdapter : usa
+        PushProcessor ..> FcmAdapter : usa
+    }
+
+    package "Logging / Persistence" {
         class DeliveryLogger {
             + logSuccess(notification)
             + logError(notification, error)
         }
-    }
-
-    package "adapters" {
-        class SesAdapter {
-            + sendEmail(params)
-        }
-        class FcmAdapter {
-            + sendPush(params)
-        }
-        class DynamoAdapter {
+        
+        class DynamoAdapter <<Infrastructure>> {
             + getItem(key)
             + putItem(item)
         }
     }
 
-    package "models" {
-        class NotificationEvent {
-            + eventId: string
-            + recipient: string
-            + payload: object
-        }
-    }
-
-    ' Relacionamentos Processor
-    RouterHandler ..> IdempotencyService : valida
-    RouterHandler ..> TemplateLoader : carrega dados
-    RouterHandler ..> NotificationEvent : parse
+    ' Relacionamentos entre componentes
     RouterHandler ..> EmailProcessor : despacha
     RouterHandler ..> PushProcessor : despacha
-    RouterHandler ..> DeliveryLogger : registra
-
-    IdempotencyService ..> DynamoAdapter : verifica ID
-    TemplateLoader ..> DynamoAdapter : busca template
-    DeliveryLogger ..> DynamoAdapter : salva log
-
-    EmailProcessor ..> SesAdapter : usa
-    PushProcessor ..> FcmAdapter : usa
+    
+    ' Trataemnto de erros / Logs
+    EmailProcessor ..> DeliveryLogger : log (success/error)
+    PushProcessor ..> DeliveryLogger : log (success/error)
+    
+    IdempotencyService ..> DynamoAdapter
+    TemplateLoader ..> DynamoAdapter
+    DeliveryLogger ..> DynamoAdapter
 }
 
 @enduml
