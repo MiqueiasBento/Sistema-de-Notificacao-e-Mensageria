@@ -88,9 +88,33 @@
             <artifactId>sqs</artifactId>
             <version>2.40.5</version>
         </dependency>
-	</dependencies>
+        <!-- https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-sqs -->
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-sqs</artifactId>
+            <version>3.4.2</version>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter -->
+            <dependency>
+                <groupId>io.awspring.cloud</groupId>
+                <artifactId>spring-cloud-aws-starter</artifactId>
+                <version>4.0.0-M1</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/software.amazon.awssdk/s3 -->
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3</artifactId>
+                <version>2.40.10</version>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<build>
+
+    <build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
