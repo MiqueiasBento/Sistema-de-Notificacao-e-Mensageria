@@ -1,9 +1,7 @@
 package https.miqueiasbento.github.io.producer.users.dto;
 
-import https.miqueiasbento.github.io.producer.users.authorization.Role;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public record UserRegisterDTO(
         @NotBlank(message = "O nome é obrigatório")
@@ -16,9 +14,6 @@ public record UserRegisterDTO(
 
         @NotBlank(message = "A senha é obrigatória")
         @Size(min = 8, message = "A senha deve ter pelo menos 8 caracteres")
-        String password,
-
-        @NotNull(message = "O cargo é obrigatório")
-        Role role
+        String password
 ) {
 }
