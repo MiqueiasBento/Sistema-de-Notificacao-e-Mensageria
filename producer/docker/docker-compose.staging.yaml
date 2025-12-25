@@ -1,0 +1,54 @@
+services:
+  smn-api:
+    image: miqueiasbto/smn-arquitetura:staging
+    ports:
+      - "8080:8080"
+    container_name: smn-api
+    environment:
+      SPRING_PROFILES_ACTIVE: staging
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    depends_on:
+      - postgres
+      - pgadmin
+    networks:
+      - smn-network
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres-smn-staging
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata-staging:/var/lib/postgresql/data
+    networks:
+      - smn-network
+
+  pgadmin:
+    image: dpage/pgadmin4:9.7.0
+    container_name: pgadmin-smn-staging
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmindata-staging:/var/lib/pgadmin/data
+    depends_on:
+      - postgres
+    networks:
+      - smn-network
+
+networks:
+  smn-network:
+    driver: bridge
+
+volumes:
+  pgdata-staging:
+    driver: local
+  pgadmindata-staging:
+    driver: local
