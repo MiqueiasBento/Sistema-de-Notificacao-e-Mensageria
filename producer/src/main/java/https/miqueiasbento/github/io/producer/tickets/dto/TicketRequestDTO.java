@@ -4,7 +4,7 @@ import https.miqueiasbento.github.io.producer.tickets.TypeTicket;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record TicketPostDto(
+public record TicketRequestDTO(
         @NotBlank(message = "O nome do usuário deve ser informado.")
         String username,
 
