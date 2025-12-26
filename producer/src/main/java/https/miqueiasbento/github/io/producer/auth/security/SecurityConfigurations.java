@@ -37,7 +37,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(HttpMethod.POST,
                                 "/auth/login",
-                                "/auth/register"
+                                "/auth/register/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/auth/test"
