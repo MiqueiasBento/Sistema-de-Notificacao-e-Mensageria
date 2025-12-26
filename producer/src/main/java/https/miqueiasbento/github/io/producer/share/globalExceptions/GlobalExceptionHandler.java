@@ -20,96 +20,102 @@ public class GlobalExceptionHandler {
                         error.getField(),
                         error.getDefaultMessage(),
                         HttpStatus.BAD_REQUEST.value(),
-                        HttpStatus.BAD_REQUEST.getReasonPhrase()
-                ))
+                        HttpStatus.BAD_REQUEST.getReasonPhrase()))
                 .toList();
 
         return ResponseEntity.badRequest().body(errors);
     }
 
-//    @ExceptionHandler(UserNotFoundException.class)
-//    public ResponseEntity<ErrorResponseDTO> handleException(UserNotFoundException e) {
-//        HttpStatus status = HttpStatus.NOT_FOUND;
-//        ErrorResponseDTO error = new ErrorResponseDTO(
-//                e.getField(),
-//                e.getMessage(),
-//                status.value(),
-//                status.getReasonPhrase()
-//        );
-//        return ResponseEntity.status(status).body(error);
-//    }
-//
-//    @ExceptionHandler(ResourceNotFoundException.class)
-//    public ResponseEntity<ErrorResponseDTO> handleException(ResourceNotFoundException e) {
-//        HttpStatus status = HttpStatus.NOT_FOUND;
-//        ErrorResponseDTO error = new ErrorResponseDTO(
-//                e.getField(),
-//                e.getMessage(),
-//                status.value(),
-//                status.getReasonPhrase()
-//        );
-//        return ResponseEntity.status(status).body(error);
-//    }
-//
-//    @ExceptionHandler(UserNotAuthenticatedException.class)
-//    public ResponseEntity<ErrorResponseDTO> handleException(UserNotAuthenticatedException e) {
-//        HttpStatus status = HttpStatus.UNAUTHORIZED;
-//        ErrorResponseDTO error = new ErrorResponseDTO(
-//                e.getField(),
-//                e.getMessage(),
-//                status.value(),
-//                status.getReasonPhrase()
-//        );
-//        return ResponseEntity.status(status).body(error);
-//    }
-//
-//    @ExceptionHandler(DeniedAccessException.class)
-//    public ResponseEntity<ErrorResponseDTO> handleException(DeniedAccessException e) {
-//        HttpStatus status = HttpStatus.FORBIDDEN;
-//        ErrorResponseDTO error = new ErrorResponseDTO(
-//                e.getField(),
-//                e.getMessage(),
-//                status.value(),
-//                status.getReasonPhrase()
-//        );
-//        return ResponseEntity.status(status).body(error);
-//    }
-//
-//    @ExceptionHandler(EntityDoesNotBelongToAnotherEntityException.class)
-//    public ResponseEntity<ErrorResponseDTO> handleException(EntityDoesNotBelongToAnotherEntityException e) {
-//        HttpStatus status = HttpStatus.FORBIDDEN;
-//        ErrorResponseDTO error = new ErrorResponseDTO(
-//                e.getField(),
-//                e.getMessage(),
-//                status.value(),
-//                status.getReasonPhrase()
-//        );
-//        return ResponseEntity.status(status).body(error);
-//    }
-//
-//    @ExceptionHandler(ResourceWithSameNameException.class)
-//    public ResponseEntity<ErrorResponseDTO> handleException(ResourceWithSameNameException e) {
-//        HttpStatus status = HttpStatus.CONFLICT;
-//        ErrorResponseDTO error = new ErrorResponseDTO(
-//                e.getField(),
-//                e.getMessage(),
-//                status.value(),
-//                status.getReasonPhrase()
-//        );
-//        return ResponseEntity.status(status).body(error);
-//    }
-//
-//    @ExceptionHandler(ExistentResourceException.class)
-//    public ResponseEntity<ErrorResponseDTO> handleException(ExistentResourceException e) {
-//        HttpStatus status = HttpStatus.CONFLICT;
-//        ErrorResponseDTO error = new ErrorResponseDTO(
-//                e.getField(),
-//                e.getMessage(),
-//                status.value(),
-//                status.getReasonPhrase()
-//        );
-//        return ResponseEntity.status(status).body(error);
-//    }
+    // @ExceptionHandler(UserNotFoundException.class)
+    // public ResponseEntity<ErrorResponseDTO> handleException(UserNotFoundException
+    // e) {
+    // HttpStatus status = HttpStatus.NOT_FOUND;
+    // ErrorResponseDTO error = new ErrorResponseDTO(
+    // e.getField(),
+    // e.getMessage(),
+    // status.value(),
+    // status.getReasonPhrase()
+    // );
+    // return ResponseEntity.status(status).body(error);
+    // }
+    //
+    // @ExceptionHandler(ResourceNotFoundException.class)
+    // public ResponseEntity<ErrorResponseDTO>
+    // handleException(ResourceNotFoundException e) {
+    // HttpStatus status = HttpStatus.NOT_FOUND;
+    // ErrorResponseDTO error = new ErrorResponseDTO(
+    // e.getField(),
+    // e.getMessage(),
+    // status.value(),
+    // status.getReasonPhrase()
+    // );
+    // return ResponseEntity.status(status).body(error);
+    // }
+    //
+    // @ExceptionHandler(UserNotAuthenticatedException.class)
+    // public ResponseEntity<ErrorResponseDTO>
+    // handleException(UserNotAuthenticatedException e) {
+    // HttpStatus status = HttpStatus.UNAUTHORIZED;
+    // ErrorResponseDTO error = new ErrorResponseDTO(
+    // e.getField(),
+    // e.getMessage(),
+    // status.value(),
+    // status.getReasonPhrase()
+    // );
+    // return ResponseEntity.status(status).body(error);
+    // }
+    //
+    // @ExceptionHandler(DeniedAccessException.class)
+    // public ResponseEntity<ErrorResponseDTO> handleException(DeniedAccessException
+    // e) {
+    // HttpStatus status = HttpStatus.FORBIDDEN;
+    // ErrorResponseDTO error = new ErrorResponseDTO(
+    // e.getField(),
+    // e.getMessage(),
+    // status.value(),
+    // status.getReasonPhrase()
+    // );
+    // return ResponseEntity.status(status).body(error);
+    // }
+    //
+    // @ExceptionHandler(EntityDoesNotBelongToAnotherEntityException.class)
+    // public ResponseEntity<ErrorResponseDTO>
+    // handleException(EntityDoesNotBelongToAnotherEntityException e) {
+    // HttpStatus status = HttpStatus.FORBIDDEN;
+    // ErrorResponseDTO error = new ErrorResponseDTO(
+    // e.getField(),
+    // e.getMessage(),
+    // status.value(),
+    // status.getReasonPhrase()
+    // );
+    // return ResponseEntity.status(status).body(error);
+    // }
+    //
+    // @ExceptionHandler(ResourceWithSameNameException.class)
+    // public ResponseEntity<ErrorResponseDTO>
+    // handleException(ResourceWithSameNameException e) {
+    // HttpStatus status = HttpStatus.CONFLICT;
+    // ErrorResponseDTO error = new ErrorResponseDTO(
+    // e.getField(),
+    // e.getMessage(),
+    // status.value(),
+    // status.getReasonPhrase()
+    // );
+    // return ResponseEntity.status(status).body(error);
+    // }
+    //
+    // @ExceptionHandler(ExistentResourceException.class)
+    // public ResponseEntity<ErrorResponseDTO>
+    // handleException(ExistentResourceException e) {
+    // HttpStatus status = HttpStatus.CONFLICT;
+    // ErrorResponseDTO error = new ErrorResponseDTO(
+    // e.getField(),
+    // e.getMessage(),
+    // status.value(),
+    // status.getReasonPhrase()
+    // );
+    // return ResponseEntity.status(status).body(error);
+    // }
 
     // Tratamento para BadRequestException (400)
     @ExceptionHandler(BadRequestException.class)
@@ -119,8 +125,7 @@ public class GlobalExceptionHandler {
                 "Campo inválido fornecido",
                 ex.getMessage(),
                 status.value(),
-                status.getReasonPhrase()
-        );
+                status.getReasonPhrase());
         return ResponseEntity.status(status).body(error);
     }
 
@@ -132,8 +137,7 @@ public class GlobalExceptionHandler {
                 "Campo inválido fornecido",
                 ex.getMessage(),
                 status.value(),
-                status.getReasonPhrase()
-        );
+                status.getReasonPhrase());
         return ResponseEntity.status(status).body(error);
     }
 
@@ -145,8 +149,19 @@ public class GlobalExceptionHandler {
                 "Campo inválido fornecido",
                 ex.getMessage(),
                 status.value(),
-                status.getReasonPhrase()
-        );
+                status.getReasonPhrase());
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(https.miqueiasbento.github.io.producer.tickets.exception.TicketNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleTicketNotFoundException(
+            https.miqueiasbento.github.io.producer.tickets.exception.TicketNotFoundException ex) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                "Ticket not found",
+                ex.getMessage(),
+                status.value(),
+                status.getReasonPhrase());
         return ResponseEntity.status(status).body(error);
     }
 }
