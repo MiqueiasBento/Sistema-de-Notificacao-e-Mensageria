@@ -18,3 +18,10 @@ api:
   security:
     token:
       secret: ${JWT_SECRET:chave-default-tests}
+
+system:
+  default:
+    admin:
+      email: ${ROOT_EMAIL}
+      username: ${ROOT_USERNAME}
+      password: ${ROOT_PASSWORD}
