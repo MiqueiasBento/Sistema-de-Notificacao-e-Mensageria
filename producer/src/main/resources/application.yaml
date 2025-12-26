@@ -2,7 +2,7 @@ spring:
   application:
     name: producer-smn
   profiles:
-    active: ${ACTIVE_PROFILE:staging}
+    active: ${ACTIVE_PROFILE:dev}
   config.import: optional:file:env/.env.dev[.properties]
 
 # JPA/Hibernate
