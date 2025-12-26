@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum TypeTicket {
-    TECNICO("tecnico"),
-    FINANCEIRO("financeiro"),
-    COMERCIAL("comercial"),
-    OUTRO("outro"),;
+    TECNICO("Tecnico"),
+    FINANCEIRO("Financeiro"),
+    COMERCIAL("Comercial"),
+    OUTRO("Outro"),;
     private final String value;
     TypeTicket(String value) {
         this.value = value;
