@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: producer-smn
+  profiles:
+    active: ${ACTIVE_PROFILE:dev}
+  config.import: optional:file:env/.env.dev[.properties]
+
+# JPA/Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties.hibernate.format_sql: true
+    open-in-view: false
+
+# Configuracao do JWT
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:chave-default-tests}
+
+system:
+  default:
+    admin:
+      email: ${ROOT_EMAIL}
+      username: ${ROOT_USERNAME}
+      password: ${ROOT_PASSWORD}
