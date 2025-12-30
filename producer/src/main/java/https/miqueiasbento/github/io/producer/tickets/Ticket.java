@@ -33,5 +33,9 @@ public class Ticket {
     @Column(nullable = false)
     private StatusTicket status;
 
+    @ManyToOne
+    @JoinColumn(name = "agent_id")
+    private User agent;
+
     private LocalDateTime createAt;
 }

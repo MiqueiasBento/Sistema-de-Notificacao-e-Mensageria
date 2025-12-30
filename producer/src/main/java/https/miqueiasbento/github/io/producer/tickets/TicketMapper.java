@@ -8,5 +8,6 @@ import org.mapstruct.Mapping;
 public interface TicketMapper {
 
     @Mapping(target = "userName", source = "user.name")
+    @Mapping(target = "agentName", source = "agent.name")
     TicketResponseDTO toDTO(Ticket ticket);
 }
