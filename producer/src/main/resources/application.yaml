@@ -28,4 +28,4 @@ system:
 
 aws:
   queue:
-    name: ${QUEUE_NAME}
+    name: ${QUEUE_NAME:smn-queue}

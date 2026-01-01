@@ -29,7 +29,7 @@ public class SqsEventPublisher implements EventPublisher {
         TicketEventPayload payload = mapper.toPayload(ticket);
         TicketCreatedEvent event = new TicketCreatedEvent(
                 UUID.randomUUID().toString(),
-                Instant.now(),
+                Instant.now().toString(),
                 payload
         );
         sendEvent(event);
@@ -40,7 +40,7 @@ public class SqsEventPublisher implements EventPublisher {
         TicketEventPayload payload = mapper.toPayload(ticket);
         TicketUpdatedEvent event = new TicketUpdatedEvent(
                 UUID.randomUUID().toString(),
-                Instant.now(),
+                Instant.now().toString(),
                 payload
         );
         sendEvent(event);
@@ -51,7 +51,7 @@ public class SqsEventPublisher implements EventPublisher {
         TicketEventPayload payload = mapper.toPayload(ticket);
         TicketStatusChangedEvent event = new TicketStatusChangedEvent(
                 UUID.randomUUID().toString(),
-                Instant.now(),
+                Instant.now().toString(),
                 payload,
                 oldStatus,
                 newStatus
@@ -64,7 +64,7 @@ public class SqsEventPublisher implements EventPublisher {
         TicketEventPayload payload = mapper.toPayload(ticket);
         TicketAssignedEvent event = new TicketAssignedEvent(
                 UUID.randomUUID().toString(),
-                Instant.now(),
+                Instant.now().toString(),
                 payload,
                 mapper.toPayload(ticket.getAgent())
         );
@@ -76,7 +76,7 @@ public class SqsEventPublisher implements EventPublisher {
         TicketEventPayload payload = mapper.toPayload(ticket);
         TicketClosedEvent event = new TicketClosedEvent(
                 UUID.randomUUID().toString(),
-                Instant.now(),
+                Instant.now().toString(),
                 payload
         );
         sendEvent(event);
