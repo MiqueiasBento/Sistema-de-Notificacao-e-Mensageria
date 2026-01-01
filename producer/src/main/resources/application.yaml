@@ -25,3 +25,7 @@ system:
       email: ${ROOT_EMAIL}
       username: ${ROOT_USERNAME}
       password: ${ROOT_PASSWORD}
+
+aws:
+  queue:
+    name: ${QUEUE_NAME}
