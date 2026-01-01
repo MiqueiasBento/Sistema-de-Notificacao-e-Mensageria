@@ -5,7 +5,7 @@ spring:
     active: ${ACTIVE_PROFILE:dev}
   config.import: optional:file:env/.env.dev[.properties]
 
-# JPA/Hibernate
+  # JPA/Hibernate
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -28,4 +28,16 @@ system:
 
 aws:
   queue:
-    name: ${QUEUE_NAME:smn-queue}
+    name: ${AWS_QUEUE_NAME:smn-queue}
+    url: ${AWS_QUEUE_URL}
+  access:
+    key:
+      id: ${AWS_ACCESS_KEY_ID}
+  secret:
+    access:
+      key: ${AWS_SECRET_ACCESS_KEY}
+  region: ${AWS_REGION}
+
+#logging:
+#  level:
+#    software.amazon.awssdk: DEBUG

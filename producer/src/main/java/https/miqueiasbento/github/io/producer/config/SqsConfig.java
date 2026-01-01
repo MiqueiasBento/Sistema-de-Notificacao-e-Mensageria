@@ -9,29 +9,25 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
-import java.net.URI;
-
 @Configuration
 public class SqsConfig {
 
-    @Value("${spring.cloud.aws.sqs.endpoint:}")
-    private String endpoint;
-
-    @Value("${spring.cloud.aws.region.static:sa-east-1}")
+    @Value("${aws.region:us-east-1}")
     private String region;
+
+    @Value("${aws.access.key.id}")
+    private String accessKey;
+
+    @Value("${aws.secret.access.key}")
+    private String secretKey;
 
     @Bean
     public SqsAsyncClient sqsAsyncClient() {
-        var builder = SqsAsyncClient.builder()
+        return SqsAsyncClient.builder()
                 .region(Region.of(region))
                 .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create("test", "test")));
-
-        if (endpoint != null && !endpoint.isEmpty()) {
-            builder.endpointOverride(URI.create(endpoint));
-        }
-
-        return builder.build();
+                        AwsBasicCredentials.create(accessKey, secretKey)))
+                .build();
     }
 
     @Bean
