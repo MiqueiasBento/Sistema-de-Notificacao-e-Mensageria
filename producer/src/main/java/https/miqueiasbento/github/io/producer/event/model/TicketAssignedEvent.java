@@ -1,7 +1,10 @@
 package https.miqueiasbento.github.io.producer.event.model;
 
+import lombok.Getter;
+
 import java.time.Instant;
 
+@Getter
 public class TicketAssignedEvent extends BaseTicketEvent {
     private final TicketEventPayload ticket;
     private final UserEventPayload agent;
@@ -10,13 +13,5 @@ public class TicketAssignedEvent extends BaseTicketEvent {
         super(eventId, "TICKET_ASSIGNED", occurredAt);
         this.ticket = ticket;
         this.agent = agent;
-    }
-
-    public TicketEventPayload getTicket() {
-        return ticket;
-    }
-
-    public UserEventPayload getAgent() {
-        return agent;
     }
 }

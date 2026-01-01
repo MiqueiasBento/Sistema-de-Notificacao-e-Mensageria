@@ -1,7 +1,10 @@
 package https.miqueiasbento.github.io.producer.event.model;
 
+import lombok.Getter;
+
 import java.time.Instant;
 
+@Getter
 public class TicketCreatedEvent extends BaseTicketEvent {
     private final TicketEventPayload ticket;
 
@@ -10,7 +13,4 @@ public class TicketCreatedEvent extends BaseTicketEvent {
         this.ticket = ticket;
     }
 
-    public TicketEventPayload getTicket() {
-        return ticket;
-    }
 }

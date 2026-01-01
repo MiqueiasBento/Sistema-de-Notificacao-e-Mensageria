@@ -1,28 +1,18 @@
 package https.miqueiasbento.github.io.producer.event.model;
 
+import lombok.Getter;
+
 import java.time.Instant;
 
+@Getter
 public abstract class BaseTicketEvent {
-    private String eventId;
-    private String eventType;
-    private Instant occurredAt;
+    private final String eventId;
+    private final String eventType;
+    private final Instant occurredAt;
 
     protected BaseTicketEvent(String eventId, String eventType, Instant occurredAt) {
         this.eventId = eventId;
         this.eventType = eventType;
         this.occurredAt = occurredAt;
-    }
-
-    // Getters
-    public String getEventId() {
-        return eventId;
-    }
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public Instant getOccurredAt() {
-        return occurredAt;
     }
 }

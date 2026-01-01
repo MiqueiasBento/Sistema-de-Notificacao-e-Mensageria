@@ -1,8 +1,11 @@
 package https.miqueiasbento.github.io.producer.event.model;
 
 import https.miqueiasbento.github.io.producer.tickets.StatusTicket;
+import lombok.Getter;
+
 import java.time.Instant;
 
+@Getter
 public class TicketStatusChangedEvent extends BaseTicketEvent {
     private final TicketEventPayload ticket;
     private final StatusTicket oldStatus;
@@ -14,17 +17,5 @@ public class TicketStatusChangedEvent extends BaseTicketEvent {
         this.ticket = ticket;
         this.oldStatus = oldStatus;
         this.newStatus = newStatus;
-    }
-
-    public TicketEventPayload getTicket() {
-        return ticket;
-    }
-
-    public StatusTicket getOldStatus() {
-        return oldStatus;
-    }
-
-    public StatusTicket getNewStatus() {
-        return newStatus;
     }
 }
