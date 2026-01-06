@@ -21,8 +21,12 @@ public class SqsEventPublisher implements EventPublisher {
     @Value("${aws.queue.name:smn-queue}")
     private String queueName;
 
+    @Value("${aws.queue.url}")
+    private String queueUrl;
+
     private final SqsTemplate sqsTemplate;
     private final TicketEventMapper mapper;
+//    private final ObjectMapper objectMapper;
 
     @Override
     public void publishTicketCreated(Ticket ticket) {

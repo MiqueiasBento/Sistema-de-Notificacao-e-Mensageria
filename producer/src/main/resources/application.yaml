@@ -38,6 +38,6 @@ aws:
       key: ${AWS_SECRET_ACCESS_KEY}
   region: ${AWS_REGION}
 
-#logging:
-#  level:
-#    software.amazon.awssdk: DEBUG
+logging:
+  level:
+    software.amazon.awssdk: DEBUG
