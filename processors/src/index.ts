@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { pollMessages } from "./messaging/sqsListener";
 
 async function start() {
