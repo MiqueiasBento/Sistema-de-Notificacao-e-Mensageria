@@ -1,5 +1,5 @@
 import { SQSClient } from "@aws-sdk/client-sqs";
 
 export const sqsClient = new SQSClient({
-  region: "us-east-2", // mesma região da fila
+  region: process.env.AWS_REGION || "us-east-2",
 });
