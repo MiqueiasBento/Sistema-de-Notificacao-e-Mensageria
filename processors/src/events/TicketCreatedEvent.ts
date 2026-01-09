@@ -10,5 +10,6 @@ export interface TicketCreatedEvent extends BaseEvent {
     title: string;
     description: string;
     status: string;
+    channels: string[];
   };
 }
