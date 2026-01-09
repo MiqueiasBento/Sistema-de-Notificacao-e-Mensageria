@@ -35,6 +35,7 @@ public class TicketService {
         ticket.setStatus(StatusTicket.PENDENTE);
         ticket.setTitle(user.getName() + " -> Solicitação de suporte do tipo: " + data.type().getValue());
         ticket.setCreateAt(LocalDateTime.now());
+        ticket.setChannels(List.of(Channel.EMAIL, Channel.PUSH));
 
         ticketRepository.save(ticket);
 
