@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { pollMessages } from "./messaging/sqsListener";
+import { pollMessages } from "./messaging/SqsListener";
 
 async function start() {
   console.log("Processor iniciado...");

@@ -1,0 +1,9 @@
+export class EmailAdapter {
+    async sendEmail(to: string, subject: string, body: string): Promise<void> {
+        console.log(`[EmailAdapter] Simulando envio de email`);
+        console.log(`Para: ${to}`);
+        console.log(`Assunto: ${subject}`);
+        console.log(`Corpo:\n${body}`);
+        return Promise.resolve();
+    }
+}
