@@ -5,14 +5,14 @@ export async function handleTicketCreated(event: TicketCreatedEvent): Promise<No
   console.log("Processando TicketCreated:", event.ticket.id);
 
   return {
-    channel: "EMAIL", // Default, será sobrescrito pelo Router se necessário ou tratado diferente
-    recipient: event.ticket.customerEmail,
+    channel: "EMAIL",
+    recipient: event.ticket.user.email,
     templateKey: "TICKET_CREATED",
     data: {
-      name: "Cliente", // Deveria vir do evento, mas vamos usar placeholder
+      name: event.ticket.user.name,
       ticketId: event.ticket.id,
-      title: event.ticket.description,
-      type: "Incidente" // Placeholder
+      title: event.ticket.title,
+      type: event.ticket.type
     }
   };
 }

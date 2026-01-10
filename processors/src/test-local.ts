@@ -6,9 +6,16 @@ const mockEvent: TicketCreatedEvent = {
   eventType: "TICKET_CREATED",
   ticket: {
     id: "TICKET-123",
+    title: "Problema Login",
     description: "Problema com login",
-    customerEmail: "cliente@exemplo.com",
-    channels: ["EMAIL", "WHATSAPP_FAKE"]
+    type: "INCIDENTE",
+    status: "OPEN",
+    user: {
+        id: "u1",
+        name: "Teste Teste",
+        email: "cliente@exemplo.com"
+    },
+    channels: ["EMAIL", "WHATSAPP"]
   }
 };
 
