@@ -15,7 +15,7 @@ const mockEvent: TicketCreatedEvent = {
         name: "Teste Teste",
         email: "cliente@exemplo.com"
     },
-    channels: ["EMAIL", "WHATSAPP"]
+    channels: ["EMAIL", "PUSH"]
   }
 };
 
