@@ -3,15 +3,18 @@ import { TemplateLoader } from "./TemplateLoader"
 import { EmailProcessor } from "./channels/EmailProcessor"
 import { PushProcessor } from "./channels/PushProcessor"
 
+import { WhatsAppProcessor } from "./channels/WhatsAppProcessor";
+
 export class NotificationService {
     constructor(
         private templateLoader: TemplateLoader,
         private emailProcessor: EmailProcessor,
-        private pushProcessor: PushProcessor
+        private pushProcessor: PushProcessor,
+        private whatsAppProcessor: WhatsAppProcessor
     ) { }
 
     async send(notification: Notification) {
-        const template = this.templateLoader.load(
+        const template = await this.templateLoader.load(
             notification.templateKey,
             notification.channel
         )
@@ -32,6 +35,11 @@ export class NotificationService {
 
         if (notification.channel === "PUSH") {
             await this.pushProcessor.send(notification.recipient, filledPush)
+        }
+        
+        if (notification.channel === "WHATSAPP") {
+            // Whatsapp geralmente usa apenas body ou template específico, adaptando aqui
+            await this.whatsAppProcessor.send(notification.recipient, { body: filledPush.body })
         }
     }
 

@@ -1,21 +1,18 @@
 import { TicketCreatedEvent } from "../events/ticket";
+import { Notification } from "../services/notification/Notification";
 
-
-export async function handleTicketCreated(event: TicketCreatedEvent) {
+export async function handleTicketCreated(event: TicketCreatedEvent): Promise<Notification> {
   console.log("Processando TicketCreated:", event.ticket.id);
 
-  const subject = `Novo Ticket Criado: ${event.ticket.id}`;
-  const body = `Olá, 
-    
-    Recebemos seu ticket "${event.ticket.description}".
-    Em breve entraremos em contato.
-    
-    Atenciosamente,
-    Equipe de Suporte`;
-
   return {
-    subject,
-    body,
-    recipient: event.ticket.customerEmail // Extraindo o destinatário aqui por conveniência
+    channel: "EMAIL", // Default, será sobrescrito pelo Router se necessário ou tratado diferente
+    recipient: event.ticket.customerEmail,
+    templateKey: "TICKET_CREATED",
+    data: {
+      name: "Cliente", // Deveria vir do evento, mas vamos usar placeholder
+      ticketId: event.ticket.id,
+      title: event.ticket.description,
+      type: "Incidente" // Placeholder
+    }
   };
 }

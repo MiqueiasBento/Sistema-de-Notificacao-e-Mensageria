@@ -1,9 +1,10 @@
 export class EmailAdapter {
     async sendEmail(to: string, subject: string, body: string): Promise<void> {
-        console.log(`[EmailAdapter] Simulando envio de email`);
-        console.log(`Para: ${to}`);
-        console.log(`Assunto: ${subject}`);
-        console.log(`Corpo:\n${body}`);
+        // TODO: Implementar Amazon SES aqui
+        console.log(`[EmailAdapter] --- Simulando envio com Amazon SES ---`);
+        console.log(`To: ${to}`);
+        console.log(`Subject: ${subject}`);
+        console.log(`Body: ${body}\n------------------------------------------------`);
         return Promise.resolve();
     }
 }

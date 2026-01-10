@@ -1,8 +1,8 @@
-export type TemplateKey = "TICKET_CREATED"
+export type TemplateKey = "TICKET_CREATED";
 
 export interface Notification {
-    channel: "EMAIL" | "PUSH"
-    recipient: string
-    templateKey: TemplateKey
-    data: Record<string, any>
+    channel: "EMAIL" | "PUSH" | "WHATSAPP";
+    recipient: string;
+    templateKey: TemplateKey;
+    data: Record<string, any>;
 }
