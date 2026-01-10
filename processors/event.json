@@ -1,0 +1,19 @@
+{
+    "eventId":"209c5f05-1ab0-44bc-b397-af23ad9bfd84",
+    "eventType":"TICKET_CREATED",
+    "occurredAt":"2026-01-06T12:08:12.132165421Z",
+    "ticket":{
+        "id":1,
+        "title":"George -> Solicitação de suporte do tipo: Tecnico",
+        "description":"Estou com problemas com meu sistema, solicito retorno de suporte técnico imediato via chamada meet.",
+        "type":"TECNICO",
+        "status":"PENDENTE",
+        "createAt":"2026-01-06T09:08:12.115206746",
+        "user":{
+            "id":"13a4d409-7ce9-4660-b7e8-c92029ae9dd6",
+            "name":"George",
+            "email":"george@example.com"
+        },
+        "agent":null
+    }
+}

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,4 +39,9 @@ public class Ticket {
     private User agent;
 
     private LocalDateTime createAt;
+
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<Channel> channels;
+
 }

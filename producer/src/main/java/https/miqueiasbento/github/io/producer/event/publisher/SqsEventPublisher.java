@@ -89,7 +89,7 @@ public class SqsEventPublisher implements EventPublisher {
     private void sendEvent(BaseTicketEvent event) {
         try {
             log.info("Publishing event {} to queue {}", event.getEventType(), queueName);
-            sqsTemplate.send(queueName, event);
+            sqsTemplate.send(queueUrl, event);
         } catch (Exception e) {
             log.error("Failed to publish event {} to SQS", event.getEventType(), e);
         }

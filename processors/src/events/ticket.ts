@@ -4,5 +4,6 @@ export interface TicketCreatedEvent {
     id: string;
     description: string;
     customerEmail: string;
+    channels: string[];
   };
 }
