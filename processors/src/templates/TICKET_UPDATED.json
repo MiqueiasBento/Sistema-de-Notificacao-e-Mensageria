@@ -1,0 +1,10 @@
+{
+  "email": {
+    "title": "Seu ticket foi atualizado",
+    "body": "\nOlá {{name}},\n\nSeu ticket de suporte foi atualizado.\n\nTicket: #{{ticketId}}\nTítulo: {{title}}\nTipo: {{type}}\nStatus: {{status}}\n\nAcesse o sistema para verificar as atualizações.\n"
+  },
+  "push": {
+    "title": "Ticket atualizado",
+    "body": "Seu ticket #{{ticketId}} foi atualizado. Verifique as mudanças."
+  }
+}
