@@ -9,8 +9,8 @@ System_Boundary(system, "Notification System") {
   Container(UI, "UI", "React.js", "UI para usuários e administradores")
   Container(producer, "Producer API", "Spring Boot / Node.js", "Exposes REST endpoints and publishes events")
   Container(sqs, "Broker (SQS)", "AWS SQS", "Gerencia a fila de mensagens.")
-  Container(notificationProcessor, "Notification Processor", "Lambda (Node.js/Python)", "Processa eventos e envia notificações por e-mail e push.")
-  Container(db, "DynamoDB", "NoSQL", "Armazena modelos e registros de notificações.")
+  Container(notificationProcessor, "Notification Processor", "Node.js / TypeScript", "Serviço responsável por pollar a fila, processar eventos e enviar notificações.")
+  Container(db, "Amazon RDS", "SQL", "Armazena modelos e registros de notificações.")
   Container(obs, "Observability", "CloudWatch / X-Ray", "Fornece registros, métricas e rastreamento.")
 }
 System_Ext(auth, "Auth (Cognito / JWT)", "Serviço de autenticação")

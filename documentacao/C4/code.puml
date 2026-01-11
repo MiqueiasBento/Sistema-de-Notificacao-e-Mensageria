@@ -111,7 +111,7 @@ package "Producer API (Container)" {
     package "Shared / Config" {
         class AwsConfig <<Infrastructure>> {
             + getSqsClient()
-            + getDynamoClient()
+            + getRdsClient()
         }
     }
 
@@ -155,7 +155,7 @@ package "Notification Processor (Container)" {
             + process(notification)
         }
         
-        class SesAdapter <<Infrastructure>> {
+        class EmailAdapter <<Infrastructure>> {
             + sendEmail(params)
         }
         
@@ -164,7 +164,7 @@ package "Notification Processor (Container)" {
         }
 
         ' Relacionamentos Processors
-        EmailProcessor ..> SesAdapter : usa
+        EmailProcessor ..> EmailAdapter : usa
         PushProcessor ..> FcmAdapter : usa
     }
 
@@ -174,7 +174,7 @@ package "Notification Processor (Container)" {
             + logError(notification, error)
         }
         
-        class DynamoAdapter <<Infrastructure>> {
+        class RdsAdapter <<Infrastructure>> {
             + getItem(key)
             + putItem(item)
         }
@@ -188,9 +188,9 @@ package "Notification Processor (Container)" {
     EmailProcessor ..> DeliveryLogger : log (success/error)
     PushProcessor ..> DeliveryLogger : log (success/error)
     
-    IdempotencyService ..> DynamoAdapter
-    TemplateLoader ..> DynamoAdapter
-    DeliveryLogger ..> DynamoAdapter
+    IdempotencyService ..> RdsAdapter
+    TemplateLoader ..> RdsAdapter
+    DeliveryLogger ..> RdsAdapter
 }
 
 @enduml

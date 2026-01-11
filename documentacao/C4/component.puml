@@ -21,31 +21,16 @@ Container(producer_api, "Producer API", "Node.js/Express/Spring", "API Rest que 
     Component(log_service, "NotificationLog Service", "Service", "Leitura de logs")
 }
 
-Container(router_container, "Router Handler", "AWS Lambda", "Roteamento e validação de idempotência") {
-    Component(router_handler, "Router Handler", "Function", "Roteamento e validação de idempotência")
+Container(notification_processor, "Notification Processor", "Node.js / TypeScript", "Serviço único que consome eventos do SQS e orquestra o envio") {
+    Component(router_handler, "Event Router", "Module", "Roteamento e validação de idempotência")
+    Component(idempotency_svc, "Idempotency Service", "Service", "Checa eventos processados")
+    Component(template_loader, "Template Loader", "Service", "Carrega templates do DB")
+    Component(email_proc, "Email Processor", "Service", "Prepara e envia emails")
+    Component(push_proc, "Push Processor", "Service", "Prepara e envia Push requests")
+    Component(del_logger, "Delivery Logger", "Service", "Registra resultado do envio")
 }
 
-Container(idempotency_container, "Idempotency Service", "AWS Lambda", "Validação de processamento") {
-    Component(idempotency_svc, "Idempotency Service", "Function", "Checa eventos processados")
-}
-
-Container(template_container, "Template Loader", "AWS Lambda", "Carregamento de templates") {
-    Component(template_loader, "Template Loader", "Function", "Carrega templates do DB")
-}
-
-Container(email_container, "Email Processor", "AWS Lambda", "Processamento de emails") {
-    Component(email_proc, "Email Processor", "Function", "Prepara e envia emails (SES)")
-}
-
-Container(push_container, "Push Processor", "AWS Lambda", "Processamento de push notifications") {
-    Component(push_proc, "Push Processor", "Function", "Prepara e envia Push requests (FCM)")
-}
-
-Container(logger_container, "Delivery Logger", "AWS Lambda", "Registro de entrega") {
-    Component(del_logger, "Delivery Logger", "Function", "Registra resultado do envio")
-}
-
-ContainerDb(dynamo, "DynamoDB", "NoSQL Database", "Armazena dados do sistema") {
+ContainerDb(rds, "Amazon RDS", "SQL Database", "Armazena dados do sistema") {
     Component(table_templates, "Templates Table", "Table", "Armazena modelos de mensagem")
     Component(table_logs, "NotificationLogs Table", "Table", "Logs de envio")
     Component(table_ids, "ProcessedEventIds Table", "Table", "Ids para idempotência")
@@ -72,7 +57,7 @@ Rel(event_publisher, sqs, "Publica evento de notificação", "SQS Protocol")
 Rel(template_service, table_templates, "CRUD")
 Rel(log_service, table_logs, "Leitura")
 
-Rel(sqs, router_handler, "Trigger Lambda", "SQS Event")
+Rel(sqs, router_handler, "Event Polling / Consumo", "SQS Message")
 
 Rel(router_handler, idempotency_svc, "Verifica processamento")
 Rel(idempotency_svc, table_ids, "Lê/Escreve IDs")
