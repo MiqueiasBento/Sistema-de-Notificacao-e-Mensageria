@@ -1,44 +1,47 @@
 import { useState } from "react";
+import { login } from "../services/auth";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function handleSubmit(e: any) {
+  async function handleLogin(e: any) {
     e.preventDefault();
 
     if (!email || !password) {
-        alert("Preencha email e senha.");
-        return;
+      alert("Preencha email e senha.");
+      return;
     }
 
     try {
-        const payload: Record<string, unknown> = { email, password };
-     
-        const res = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-        });
+      const data = await login({
+        email,
+        password,
+      });
 
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({ message: res.statusText }));
-            alert(err.message || "Erro no login");
-            return;
-        }
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.role);
 
-        const data = await res.json();
-        if (data.token) localStorage.setItem("token", data.token);
-        if (data.user) localStorage.setItem("user", JSON.stringify(data.user));
+      console.log("Login OK:", data);
 
-        // redirecionar para a página principal ou dashboard
-        window.location.href = "/";
-    } catch (error) {
-        console.error(error);
-        alert("Erro ao conectar com o servidor.");
+      window.location.href = "/";
+    } catch (error: any) {
+      if (error.response) {
+        // O servidor respondeu com status code fora de 2xx
+        console.log("Erro no servidor:", error.response.status);
+        console.log("Mensagem:", error.response.data);
+        alert(`Erro: ${error.response.data.message || error.response.status}`);
+      } else if (error.request) {
+        // Requisição enviada, mas sem resposta
+        console.log("Sem resposta:", error.request);
+        alert("Servidor não respondeu.");
+      } else {
+        // Outro erro
+        console.log("Erro Axios:", error.message);
+        alert(error.message);
+      }
     }
-
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-6">
@@ -46,7 +49,7 @@ export default function Login() {
         <h1 className="mb-8 text-center !text-8xl font-extrabold leading-none tracking-tight">
           Login
         </h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label
               htmlFor="email"
@@ -88,8 +91,8 @@ export default function Login() {
           </button>
           <div className="mt-4 text-center">
             <span className="text-gray-600">Ainda não está registrado? </span>
-            <a 
-              href="/register" 
+            <a
+              href="/register"
               className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
             >
               Registre-se

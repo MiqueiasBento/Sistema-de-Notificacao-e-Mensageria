@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { UserRole } from "../types";
+import { register, registerSuporte } from "../services/auth";
 
 export default function Register() {
   const [role, setRole] = useState<UserRole | null>(null);
@@ -15,45 +16,39 @@ export default function Register() {
       return;
     }
 
-        // Validações básicas
-        if (!role) {
-          alert("Selecione um tipo de perfil");
-          return;
-        }
-        if (!name.trim() || !email.trim() || !password) {
-          alert("Preencha todos os campos obrigatórios");
-          return;
-        }
-        if (password !== confirmPassword) {
-          alert("Senhas não conferem");
-          setConfirmPassword("");
-          return;
-        }
+    // Validações básicas
+    if (!role) {
+      alert("Selecione um tipo de perfil");
+      return;
+    }
+    if (!name.trim() || !email.trim() || !password) {
+      alert("Preencha todos os campos obrigatórios");
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert("Senhas não conferem");
+      setConfirmPassword("");
+      return;
+    }
 
-        // Preparar payload
-        const payload = { role, name, email, password };
+    const payload = { role, name, email, password };
 
-        try {
-          const res = await fetch("/api/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
+    try {
+      if (role === "cliente") {
+        await register(payload);
+      }
 
-          if (!res.ok) {
-            const errBody = await res.json().catch(() => null);
-            const msg = errBody?.message ?? `Erro ${res.status}: ${res.statusText}`;
-            alert(`Falha ao registrar: ${msg}`);
-            return;
-          }
+      if (role === "suporte") {
+        await registerSuporte(payload);
+      }
 
-          alert("Registro efetuado com sucesso! Redirecionando para login...");
-          window.location.href = "/login";
-        } catch (error) {
-          console.error(error);
-          alert("Erro de rede ao tentar registrar. Tente novamente mais tarde.");
-        }
-      };
+      alert("Registro efetuado com sucesso! Redirecionando para login...");
+      window.location.href = "/login";
+    } catch (error) {
+      console.error(error);
+      alert("Erro de rede ao tentar registrar. Tente novamente mais tarde.");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-6">
@@ -160,13 +155,18 @@ export default function Register() {
           >
             Registrar
           </button>
-          
+
           <div className="mt-4 border-t pt-4 text-center">
             <p className="text-sm text-gray-600">
-              Já tem cadastro? <a href="/login" className="text-blue-600 font-medium hover:underline">Vá para a tela de login</a>
+              Já tem cadastro?{" "}
+              <a
+                href="/login"
+                className="text-blue-600 font-medium hover:underline"
+              >
+                Vá para a tela de login
+              </a>
             </p>
           </div>
-          
         </form>
       </div>
     </div>
