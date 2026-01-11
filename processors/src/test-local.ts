@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { routeEvent } from "./messaging/eventRouter";
 import { TicketCreatedEvent } from "./events/ticket";
 
@@ -13,13 +14,16 @@ const mockEvent: TicketCreatedEvent = {
     user: {
         id: "u1",
         name: "Teste Teste",
-        email: "cliente@exemplo.com"
+        email: process.env.EMAIL_TO || "cliente@exemplo.com"
     },
     channels: ["EMAIL", "PUSH"]
   }
 };
 
 console.log("--- Iniciando Teste Local ---");
+console.log(`Enviando email para: ${mockEvent.ticket.user.email}`);
+
 routeEvent(mockEvent)
   .then(() => console.log("--- Teste Finalizado ---"))
   .catch((err) => console.error("Erro no teste:", err));
+
