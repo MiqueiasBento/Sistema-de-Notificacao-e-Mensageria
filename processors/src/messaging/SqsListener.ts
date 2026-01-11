@@ -1,6 +1,6 @@
-import { ReceiveMessageCommand } from "@aws-sdk/client-sqs";
+import { ReceiveMessageCommand, DeleteMessageCommand } from "@aws-sdk/client-sqs";
 import { sqsClient } from "../config/aws";
-import { routeEvent } from "./eventRouter";
+import { routeEvent } from "./EventRouter";
 
 const QUEUE_URL = process.env.QUEUE_URL!;
 
@@ -20,5 +20,14 @@ export async function pollMessages() {
 
     const event = JSON.parse(message.Body);
     await routeEvent(event);
+
+    // Deletar mensagem da fila após processamento bem-sucedido
+    if (message.ReceiptHandle) {
+      await sqsClient.send(new DeleteMessageCommand({
+        QueueUrl: QUEUE_URL,
+        ReceiptHandle: message.ReceiptHandle
+      }));
+      console.log(`[SqsListener] Mensagem deletada da fila: ${message.MessageId}`);
+    }
   }
 }
