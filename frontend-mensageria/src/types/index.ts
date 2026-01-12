@@ -1,10 +1,10 @@
 export type UserRole = 'USUARIO' | 'SUPORTE' | 'ADMIN';
 
-export type TicketStatus = 'pendente' | 'em-andamento' | 'resolvido' | 'fechado';
+export type TicketStatus = 'PENDENTE' | 'EM-ANDAMENTO' | 'RESOLVIDO' | 'FECHADO';
 
-export type TicketType = 'tecnico' | 'financeiro' | 'comercial' | 'outro';
+export type TicketType = 'TECNICO' | 'FINANCEIRO' | 'COMERCIAL' | 'OUTRO';
 
-export type NotificationChannel = 'email' | 'push';
+export type NotificationChannel = 'EMAIL' | 'PUSH';
 
 export type NotificationEvent = 
   | 'chamado-aberto'
@@ -14,11 +14,10 @@ export type NotificationEvent =
 
 export interface Ticket {
   id: string;
-  nome: string;
-  sobrenome: string;
+  username: string;
   email: string;
-  tipo: TicketType;
-  mensagem: string;
+  type: TicketType;
+  description: string;
   status: TicketStatus;
   createdAt: Date;
   updatedAt: Date;

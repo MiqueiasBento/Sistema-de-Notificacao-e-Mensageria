@@ -39,7 +39,7 @@ export default function Register() {
       }
 
       alert("Registro efetuado com sucesso! Redirecionando para login...");
-      window.location.href = "/login";
+      window.location.href = "/";
     } catch (error) {
       console.error(error);
       alert("Erro de rede ao tentar registrar. Tente novamente mais tarde.");
@@ -156,7 +156,7 @@ export default function Register() {
             <p className="text-sm text-gray-600">
               Já tem cadastro?{" "}
               <a
-                href="/login"
+                href="/"
                 className="text-blue-600 font-medium hover:underline"
               >
                 Vá para a tela de login

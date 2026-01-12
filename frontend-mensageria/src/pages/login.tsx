@@ -24,7 +24,7 @@ export default function Login() {
 
       console.log("Login OK:", data);
 
-      window.location.href = "/";
+      window.location.href = "/home";
     } catch (error: any) {
       if (error.response) {
         // O servidor respondeu com status code fora de 2xx
@@ -32,11 +32,9 @@ export default function Login() {
         console.log("Mensagem:", error.response.data);
         alert(`Erro: ${error.response.data.message || error.response.status}`);
       } else if (error.request) {
-        // Requisição enviada, mas sem resposta
         console.log("Sem resposta:", error.request);
         alert("Servidor não respondeu.");
       } else {
-        // Outro erro
         console.log("Erro Axios:", error.message);
         alert(error.message);
       }

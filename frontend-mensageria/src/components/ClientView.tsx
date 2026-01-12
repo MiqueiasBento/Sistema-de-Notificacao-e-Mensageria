@@ -1,49 +1,93 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import type { Ticket, TicketType } from "../types";
 import { TicketModal } from "./TicketModal";
+import {
+  getTickets,
+  createTicket,
+} from "../services/chamados";
 
-interface ClientViewProps {
-  tickets: Ticket[];
-  onCreateTicket: (data: {
+export function ClientView() {
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [expandedTicket, setExpandedTicket] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadTickets();
+  }, []);
+
+  async function loadTickets() {
+    try {
+      setLoading(true);
+      const data = await getTickets();
+      setTickets(data);
+    } catch (error) {
+      console.error("Erro ao buscar chamados", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleCreateTicket(data: {
     nome: string;
     sobrenome: string;
     email: string;
     tipo: TicketType;
     mensagem: string;
-  }) => void;
-}
+  }) {
+    try {
+      const username = `${data.nome} ${data.sobrenome}`;
+      const email = data.email;
+      const type = data.tipo;
+      const description = data.mensagem;
+      alert(`Debug - criando chamado com:\n${JSON.stringify(
+        { username, email, type, description },
+        null,
+        2
+      )}`);
+      const newTicket = await createTicket({
+        username: `${data.nome} ${data.sobrenome}`,
+        email: data.email,
+        type: data.tipo,
+        description: data.mensagem,
+      });
 
-export function ClientView({ tickets, onCreateTicket }: ClientViewProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [expandedTicket, setExpandedTicket] = useState<string | null>(null);
+      alert("Chamado criado com sucesso!");
+
+      setTickets((prev) => [newTicket, ...prev]);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Erro ao criar chamado", error);
+    }
+  }
 
   const getStatusLabel = (status: string) => {
     const labels = {
-      pendente: "Pendente",
-      "em-andamento": "Em Andamento",
-      resolvido: "Resolvido",
-      fechado: "Fechado",
+      PENDENTE: "Pendente",
+      EM_ANDAMENTO: "Em Andamento",
+      RESOLVIDO: "Resolvido",
+      FECHADO: "Fechado",
     };
     return labels[status as keyof typeof labels] || status;
   };
 
   const getStatusColor = (status: string) => {
     const colors = {
-      pendente: "bg-yellow-100 text-yellow-800",
-      "em-andamento": "bg-blue-100 text-blue-800",
-      resolvido: "bg-green-100 text-green-800",
-      fechado: "bg-gray-100 text-gray-800",
+      PENDENTE: "bg-yellow-100 text-yellow-800",
+      EM_ANDAMENTO: "bg-blue-100 text-blue-800",
+      RESOLVIDO: "bg-green-100 text-green-800",
+      FECHADO: "bg-gray-100 text-gray-800",
     };
     return colors[status as keyof typeof colors] || "bg-gray-100 text-gray-800";
   };
 
   const getTipoLabel = (tipo: string) => {
     const labels = {
-      tecnico: "Técnico",
-      financeiro: "Financeiro",
-      comercial: "Comercial",
-      outro: "Outro",
+      TECNICO: "Técnico",
+      FINANCEIRO: "Financeiro",
+      COMERCIAL: "Comercial",
+      OUTRO: "Outro",
     };
     return labels[tipo as keyof typeof labels] || tipo;
   };
@@ -57,6 +101,14 @@ export function ClientView({ tickets, onCreateTicket }: ClientViewProps) {
       minute: "2-digit",
     });
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <span>Carregando chamados...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -102,7 +154,7 @@ export function ClientView({ tickets, onCreateTicket }: ClientViewProps) {
                         #{ticket.id}
                       </span>
                       <span className="flex-1 text-left">
-                        {getTipoLabel(ticket.tipo)}
+                        {getTipoLabel(ticket.type)}
                       </span>
                       <span
                         className={`px-2 py-1 rounded-full text-xs ${getStatusColor(
@@ -124,17 +176,17 @@ export function ClientView({ tickets, onCreateTicket }: ClientViewProps) {
                       <div className="space-y-3">
                         <div>
                           <p className="text-sm text-gray-500">Solicitante</p>
-                          <p>
-                            {ticket.nome} {ticket.sobrenome}
-                          </p>
+                          <p>{ticket.username}</p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-500">E-mail</p>
                           <p>{ticket.email}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-500">Mensagem</p>
-                          <p className="text-gray-700">{ticket.mensagem}</p>
+                          <p className="text-sm text-gray-500">Descrição</p>
+                          <p className="text-gray-700">
+                            {ticket.description}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-500">
@@ -165,7 +217,7 @@ export function ClientView({ tickets, onCreateTicket }: ClientViewProps) {
       <TicketModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={onCreateTicket}
+        onSubmit={handleCreateTicket}
       />
     </div>
   );

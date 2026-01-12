@@ -19,7 +19,7 @@ export function TicketModal({ isOpen, onClose, onSubmit }: TicketModalProps) {
     nome: "",
     sobrenome: "",
     email: "",
-    tipo: "tecnico" as TicketType,
+    tipo: "TECNICO" as TicketType,
     mensagem: "",
   });
 
@@ -32,7 +32,7 @@ export function TicketModal({ isOpen, onClose, onSubmit }: TicketModalProps) {
       nome: "",
       sobrenome: "",
       email: "",
-      tipo: "tecnico",
+      tipo: "" as TicketType,
       mensagem: "",
     });
     onClose();
@@ -120,10 +120,10 @@ export function TicketModal({ isOpen, onClose, onSubmit }: TicketModalProps) {
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="tecnico">Técnico</option>
-              <option value="financeiro">Financeiro</option>
-              <option value="comercial">Comercial</option>
-              <option value="outro">Outro</option>
+              <option value="TECNICO">Técnico</option>
+              <option value="FINANCEIRO">Financeiro</option>
+              <option value="COMERCIAL">Comercial</option>
+              <option value="OUTRO">Outro</option>
             </select>
           </div>
 

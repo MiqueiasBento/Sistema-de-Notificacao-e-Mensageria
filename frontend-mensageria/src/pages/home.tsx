@@ -4,18 +4,16 @@ import type {
   UserRole,
   Ticket,
   Template,
-  TicketType,
   TicketStatus,
 } from "../types";
-import { mockTickets, mockTemplates } from "../data/mockData";
 import { ClientView } from "../components/ClientView";
 import { SupportView } from "../components/SupportView";
 import { AdminView } from "../components/AdminView";
 
 export default function Home() {
   const [currentRole, setCurrentRole] = useState<UserRole | null>(null);
-  const [tickets, setTickets] = useState<Ticket[]>(mockTickets);
-  const [templates, setTemplates] = useState<Template[]>(mockTemplates);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [templates, setTemplates] = useState<Template[]>([]);
 
   useEffect(() => {
     const role = localStorage.getItem("role");
@@ -23,23 +21,6 @@ export default function Home() {
       setCurrentRole(role as UserRole);
     }
   }, []);
-
-  const handleCreateTicket = (data: {
-    nome: string;
-    sobrenome: string;
-    email: string;
-    tipo: TicketType;
-    mensagem: string;
-  }) => {
-    const newTicket: Ticket = {
-      id: String(tickets.length + 1),
-      ...data,
-      status: "pendente",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    setTickets([...tickets, newTicket]);
-  };
 
   const handleUpdateStatus = (ticketId: string, status: TicketStatus) => {
     setTickets(
@@ -57,7 +38,7 @@ export default function Home() {
         ticket.id === ticketId
           ? {
               ...ticket,
-              status: "fechado",
+              status: "FECHADO",
               respostaFechamento: resposta,
               updatedAt: new Date(),
             }
@@ -101,7 +82,7 @@ export default function Home() {
       </div>
 
       {currentRole === "USUARIO" && (
-        <ClientView tickets={tickets} onCreateTicket={handleCreateTicket} />
+        <ClientView/>
       )}
 
       {currentRole === "SUPORTE" && (
