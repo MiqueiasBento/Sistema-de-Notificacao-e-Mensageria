@@ -22,7 +22,7 @@ public class Ticket {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false, columnDefinition = "varchar(50)")
+    @Column(nullable = false, columnDefinition = "varchar(150)")
     private String title;
 
     @Column(nullable = false, columnDefinition = "varchar(200)")
