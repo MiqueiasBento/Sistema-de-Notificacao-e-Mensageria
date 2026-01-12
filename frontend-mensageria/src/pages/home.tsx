@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { User, Headphones, Settings, UserCircle2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { UserCircle2 } from "lucide-react";
 import type {
   UserRole,
   Ticket,
@@ -16,6 +16,13 @@ export default function Home() {
   const [currentRole, setCurrentRole] = useState<UserRole | null>(null);
   const [tickets, setTickets] = useState<Ticket[]>(mockTickets);
   const [templates, setTemplates] = useState<Template[]>(mockTemplates);
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role) {
+      setCurrentRole(role as UserRole);
+    }
+  }, []);
 
   const handleCreateTicket = (data: {
     nome: string;
@@ -75,62 +82,6 @@ export default function Home() {
     setTemplates(templates.filter((t) => t.id !== id));
   };
 
-  if (!currentRole) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full">
-          <h1 className="text-center mb-8">Sistema de Helpdesk</h1>
-          <p className="text-center text-gray-600 mb-8">
-            Selecione seu perfil de acesso
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <button
-              onClick={() => setCurrentRole("cliente")}
-              className="flex flex-col items-center gap-4 p-6 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
-            >
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                <User className="w-8 h-8 text-blue-600" />
-              </div>
-              <div className="text-center">
-                <h2>Cliente</h2>
-                <p className="text-sm text-gray-600">
-                  Abrir e acompanhar chamados
-                </p>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setCurrentRole("suporte")}
-              className="flex flex-col items-center gap-4 p-6 border-2 border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-all"
-            >
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <Headphones className="w-8 h-8 text-green-600" />
-              </div>
-              <div className="text-center">
-                <h2>Suporte</h2>
-                <p className="text-sm text-gray-600">Gerenciar chamados</p>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setCurrentRole("admin")}
-              className="flex flex-col items-center gap-4 p-6 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all"
-            >
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                <Settings className="w-8 h-8 text-purple-600" />
-              </div>
-              <div className="text-center">
-                <h2>Administrador</h2>
-                <p className="text-sm text-gray-600">Gestão de templates</p>
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div>
       <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
@@ -149,11 +100,11 @@ export default function Home() {
         </button>
       </div>
 
-      {currentRole === "cliente" && (
+      {currentRole === "USUARIO" && (
         <ClientView tickets={tickets} onCreateTicket={handleCreateTicket} />
       )}
 
-      {currentRole === "suporte" && (
+      {currentRole === "SUPORTE" && (
         <SupportView
           tickets={tickets}
           onUpdateStatus={handleUpdateStatus}
@@ -161,7 +112,7 @@ export default function Home() {
         />
       )}
 
-      {currentRole === "admin" && (
+      {currentRole === "ADMIN" && (
         <AdminView
           templates={templates}
           onCreateTemplate={handleCreateTemplate}

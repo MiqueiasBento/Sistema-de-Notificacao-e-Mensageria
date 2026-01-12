@@ -1,4 +1,4 @@
-export type UserRole = 'cliente' | 'suporte' | 'admin';
+export type UserRole = 'USUARIO' | 'SUPORTE' | 'ADMIN';
 
 export type TicketStatus = 'pendente' | 'em-andamento' | 'resolvido' | 'fechado';
 

@@ -11,10 +11,6 @@ export default function Register() {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Senhas não conferem");
-      return;
-    }
 
     // Validações básicas
     if (!role) {
@@ -31,14 +27,14 @@ export default function Register() {
       return;
     }
 
-    const payload = { role, name, email, password };
+    const payload = { name, email, password };
 
     try {
-      if (role === "cliente") {
+      if (role === "USUARIO") {
         await register(payload);
       }
 
-      if (role === "suporte") {
+      if (role === "SUPORTE") {
         await registerSuporte(payload);
       }
 
@@ -75,8 +71,8 @@ export default function Register() {
                 <option value="" disabled>
                   Selecione um perfil
                 </option>
-                <option value="client">Cliente</option>
-                <option value="support">Suporte</option>
+                <option value="USUARIO">Usuário</option>
+                <option value="SUPORTE">Suporte</option>
               </select>
             </div>
           </div>
