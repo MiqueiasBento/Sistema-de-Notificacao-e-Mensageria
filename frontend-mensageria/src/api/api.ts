@@ -15,21 +15,18 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const publicRoutes = ['/auth/login', '/auth/register'];
+
+    const isPublicRoute = publicRoutes.some((route) =>
+      config.url?.includes(route)
+    );
+
+    if (token && !isPublicRoute) {
+      config.headers?.set('Authorization', `Bearer ${token}`);
     }
 
-    console.log('🚀 Request:', config.method?.toUpperCase(), config.url);
-    console.log('📦 Data:', config.data);
-    console.log('🔑 Token:', token ? 'Presente ✅' : 'Ausente ❌');
-
     return config;
-  },
-  (error) => {
-    console.error('❌ Request Error:', error);
-    return Promise.reject(error);
-  }
-);
+  });
 
 /* =========================
    RESPONSE INTERCEPTOR
