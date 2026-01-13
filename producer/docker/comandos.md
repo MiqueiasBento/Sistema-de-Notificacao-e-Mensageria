@@ -101,7 +101,11 @@ Buildar a imagem da API localmente, testar, taggear e enviar ao Docker Hub para 
 2. Buildar a imagem (no diretório onde o Dockerfile está):
 
    ```bash
+   para linux
    DOCKER_BUILDKIT=1 docker build -t miqueiasbto/smn-arquitetura:staging -f docker/Dockerfile .
+
+   para windows
+   $env:DOCKER_BUILDKIT=1; docker build -t miqueiasbto/smn-arquitetura:staging -f docker/Dockerfile .
    # Exemplo: DOCKER_BUILDKIT=1 docker build -t miqueiasbto/avanttech-jr:staging -f docker/Dockerfile .
    ```
 3. Testar localmente passando variáveis de staging (não embutir .env na imagem):

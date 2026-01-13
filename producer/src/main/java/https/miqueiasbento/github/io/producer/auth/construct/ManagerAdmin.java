@@ -21,7 +21,7 @@ public class ManagerAdmin {
     @Value("${system.default.admin.username}")
     private String rootUsername;
 
-    @Value("${system.default.admin.password")
+    @Value("${system.default.admin.password}")
     private String rootPassword;
 
     private final UserService userService;
@@ -29,6 +29,11 @@ public class ManagerAdmin {
     @PostConstruct
     public void init() {
         log.info("Criação do administrador - {}", ManagerAdmin.class);
+
+        if (userService.findByEmail(rootEmail).isPresent()) {
+            log.info("Administrador já cadastrado.");
+            return;
+        }
 
         UserRegisterDTO user = new UserRegisterDTO(rootUsername, rootEmail, rootPassword);
         userService.save(user, Role.GERENTE);

@@ -42,4 +42,10 @@ public class TicketController {
             @RequestBody @Valid UpdateTicketStatusDTO data) {
         return ResponseEntity.ok(ticketService.updateStatus(id, data));
     }
+
+    @PatchMapping("/{id}/assign")
+    public ResponseEntity<TicketResponseDTO> assignAgent(@PathVariable Long id,
+            @RequestParam String email) {
+        return ResponseEntity.ok(ticketService.assignAgent(id, email));
+    }
 }

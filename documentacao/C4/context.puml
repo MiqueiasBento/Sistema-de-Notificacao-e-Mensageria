@@ -21,8 +21,7 @@ Rel(system, auth, "Valida tokens / autenticação")
 Note as N1
 **Nível de detalhes:**
 - Nenhum detalhe técnico específico.
-- Não mostra APIs, tabelas, filas ou Lambdas.
-- Não mostra módulos internos.
+- Não mostra APIs, tabelas ou filas.
 - Apenas "pessoas ↔ sistema ↔ outros sistemas".
 End note
 

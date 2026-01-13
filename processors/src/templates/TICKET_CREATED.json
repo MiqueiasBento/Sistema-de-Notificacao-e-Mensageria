@@ -1,0 +1,10 @@
+{
+  "email": {
+    "title": "Seu ticket foi criado",
+    "body": "\nOlá {{name}},\n\nRecebemos sua solicitação de suporte.\n\nTicket: #{{ticketId}}\nTítulo: {{title}}\nTipo: {{type}}\n\nNossa equipe irá analisá-lo em breve.\n"
+  },
+  "push": {
+    "title": "Ticket criado",
+    "body": "Seu ticket #{{ticketId}} foi registrado com sucesso."
+  }
+}

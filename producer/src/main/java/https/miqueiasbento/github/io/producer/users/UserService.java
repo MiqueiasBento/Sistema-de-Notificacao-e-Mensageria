@@ -36,8 +36,7 @@ public class UserService {
                 encryptedPassword,
                 role,
                 LocalDate.now(),
-                true
-        );
+                true);
         userRepository.save(user);
 
         return user;
@@ -49,6 +48,10 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("ID", "Usuário com o ID: " + id + " não encontrado"));
 
         return userMapper.toUserDto(user);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public Page<UserDto> findSuportes(Integer pagina, Integer tamanhoPagina) {
@@ -125,7 +128,7 @@ public class UserService {
     }
 
     private void validationData(UserRegisterDTO dto) {
-        if(this.userRepository.findByEmail(dto.email()).isPresent()){
+        if (this.userRepository.findByEmail(dto.email()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "O email informado já está cadastrado");
         }
     }

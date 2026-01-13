@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,7 +22,7 @@ public class Ticket {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false, columnDefinition = "varchar(50)")
+    @Column(nullable = false, columnDefinition = "varchar(150)")
     private String title;
 
     @Column(nullable = false, columnDefinition = "varchar(200)")
@@ -33,5 +34,14 @@ public class Ticket {
     @Column(nullable = false)
     private StatusTicket status;
 
+    @ManyToOne
+    @JoinColumn(name = "agent_id")
+    private User agent;
+
     private LocalDateTime createAt;
+
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<Channel> channels;
+
 }
