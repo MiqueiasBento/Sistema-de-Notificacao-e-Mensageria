@@ -75,16 +75,20 @@ Abaixo estão os diagramas que representam a arquitetura do sistema seguindo o m
 **1. Diagrama de Contexto**  
 ![Diagrama de Contexto](https://github.com/MiqueiasBento/Sistema-de-Notificacao-e-Mensageria/blob/main/documentacao/C4/diagramas/context.svg)
 
+---
+
 **2. Diagrama de Contêiner**  
 ![Diagrama de Contêiner](https://github.com/MiqueiasBento/Sistema-de-Notificacao-e-Mensageria/blob/main/documentacao/C4/diagramas/container.svg)
 
+---
+
 **3. Diagrama de Componente**  
-![Diagrama de Componente](https://github.com/MiqueiasBento/Sistema-de-Notificacao-e-Mensageria/blob/main/documentacao/C4/diagramas/components.svg)
+![Diagrama de Componente](https://github.com/MiqueiasBento/Sistema-de-Notificacao-e-Mensageria/blob/main/documentacao/C4/diagramas/component.svg)
+
+---
 
 **4. Diagrama de Código**  
 ![Diagrama de Código](https://github.com/MiqueiasBento/Sistema-de-Notificacao-e-Mensageria/blob/main/documentacao/C4/diagramas/code.svg)
-
-###
 
 ---
 
