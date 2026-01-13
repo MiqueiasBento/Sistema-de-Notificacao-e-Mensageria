@@ -1,4 +1,4 @@
-import { TicketCreatedEvent } from "../events/ticket";
+import { TicketClosedEvent } from "../events/ticket";
 import { Notification } from "../services/notification/Notification";
 
 function formatDate(dateString?: string): string {
@@ -18,13 +18,13 @@ function formatDate(dateString?: string): string {
   }
 }
 
-export async function handleTicketCreated(event: TicketCreatedEvent): Promise<Notification> {
-  console.log("Processando TicketCreated:", event.ticket.id);
+export async function handleTicketClosed(event: TicketClosedEvent): Promise<Notification> {
+  console.log("Processando TicketClosed:", event.ticket.id);
 
   return {
     channel: "EMAIL",
     recipient: event.ticket.user.email,
-    templateKey: "TICKET_CREATED",
+    templateKey: "TICKET_CLOSED",
     data: {
       name: event.ticket.user.name,
       ticketId: event.ticket.id,
@@ -33,7 +33,7 @@ export async function handleTicketCreated(event: TicketCreatedEvent): Promise<No
       type: event.ticket.type,
       status: event.ticket.status,
       createAt: formatDate(event.ticket.createAt),
-      agentName: event.ticket.agent?.name || "Aguardando atribuição"
+      agentName: event.ticket.agent?.name || "Não atribuído"
     }
   };
 }

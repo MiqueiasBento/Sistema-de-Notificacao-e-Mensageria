@@ -1,4 +1,4 @@
-import { TicketCreatedEvent } from "../events/ticket";
+import { TicketStatusChangedEvent } from "../events/ticket";
 import { Notification } from "../services/notification/Notification";
 
 function formatDate(dateString?: string): string {
@@ -18,20 +18,21 @@ function formatDate(dateString?: string): string {
   }
 }
 
-export async function handleTicketCreated(event: TicketCreatedEvent): Promise<Notification> {
-  console.log("Processando TicketCreated:", event.ticket.id);
+export async function handleTicketStatusChanged(event: TicketStatusChangedEvent): Promise<Notification> {
+  console.log("Processando TicketStatusChanged:", event.ticket.id, `(${event.oldStatus} -> ${event.newStatus})`);
 
   return {
     channel: "EMAIL",
     recipient: event.ticket.user.email,
-    templateKey: "TICKET_CREATED",
+    templateKey: "TICKET_STATUS_CHANGED",
     data: {
       name: event.ticket.user.name,
       ticketId: event.ticket.id,
       title: event.ticket.title,
       description: event.ticket.description || "Sem descrição",
       type: event.ticket.type,
-      status: event.ticket.status,
+      status: event.newStatus,
+      oldStatus: event.oldStatus,
       createAt: formatDate(event.ticket.createAt),
       agentName: event.ticket.agent?.name || "Aguardando atribuição"
     }

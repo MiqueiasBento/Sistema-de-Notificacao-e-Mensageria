@@ -1,0 +1,10 @@
+{
+  "email": {
+    "title": "Ticket finalizado com sucesso",
+    "body": "\nOlá {{name}},\n\nTemos o prazer de informar que seu ticket de suporte foi finalizado.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nRESUMO DO TICKET\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nNúmero do Ticket: #{{ticketId}}\nTítulo: {{title}}\nDescrição: {{description}}\nTipo: {{type}}\nStatus Final: {{status}}\nData de Criação: {{createAt}}\nAgente Responsável: {{agentName}}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n✅ Seu chamado foi resolvido e está sendo encerrado.\n\nAgradecemos seu contato e a confiança em nossos serviços. Esperamos ter atendido suas expectativas.\n\nSe precisar de mais ajuda ou tiver uma nova solicitação, não hesite em nos contatar. Estamos sempre à disposição!\n\nAtenciosamente,\nEquipe de Suporte\n"
+  },
+  "push": {
+    "title": "Ticket fechado",
+    "body": "Seu ticket #{{ticketId}} foi finalizado com sucesso! Obrigado por utilizar nossos serviços."
+  }
+}
