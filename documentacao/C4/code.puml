@@ -54,6 +54,17 @@ package "Producer API (Container)" {
         class TicketController {
             + createTicket(req, res)
         }
+
+        class TicketService {
+            + create(ticketData)
+            + updateStatus(ticketData)
+            + ticketResolved(ticketData)
+        }
+
+        class TicketRepository <<Infrastructure>> {
+            + save(ticket)
+            + findById(id)
+        }
         
         class EventPublisherService {
             + publish(event: TicketCreatedEvent)
@@ -69,10 +80,11 @@ package "Producer API (Container)" {
         class JwtAuthMiddleware <<CrossCutting>> {
             + verifyToken(req, res, next)
         }
-        note right of JwtAuthMiddleware : Componente transversal (Segurança)
 
         ' Relacionamentos Internos
-        TicketController ..> EventPublisherService
+        TicketController ..> TicketService
+        TicketService ..> TicketRepository
+        TicketService ..> EventPublisherService
         EventPublisherService ..> TicketCreatedEvent : <<publishes>>
         JwtAuthMiddleware -- TicketController : intercepts
     }
