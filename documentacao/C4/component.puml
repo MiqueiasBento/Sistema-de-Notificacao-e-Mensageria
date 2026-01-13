@@ -12,7 +12,7 @@ Container(spa, "Single Page Application", "React", "Interface para envio e geren
     Component(admin_mod, "Admin Module", "React Component", "Gerencia templates e reprocessamento DLQ")
 }
 
-Container(producer_api, "Producer API", "Node.js/Express/Spring", "API Rest que recebe requisições e publica eventos") {
+Container(producer_api, "Producer API", "Spring Boot e Docker", "API Rest que recebe requisições e publica eventos") {
     Component(auth_middleware, "JWT Middleware", "Middleware", "Valida token JWT e roles")
     Component(ticket_controller, "Ticket Controller", "Controller", "Recebe POST /tickets")
     Component(admin_controller, "Admin Controller", "Controller", "Rotas de templates e DLQ")
