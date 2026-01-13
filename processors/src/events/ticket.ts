@@ -6,11 +6,17 @@ export interface TicketCreatedEvent {
     description: string;
     type: string;
     status: string;
+    createAt?: string;
     user: {
       id: string;
       name: string;
       email: string;
     };
+    agent?: {
+      id: string;
+      name: string;
+      email: string;
+    } | null;
     channels?: string[]; // Opcional no JSON cru, mas necessário pro router (vamos tratar)
   };
 }
@@ -23,11 +29,17 @@ export interface TicketStatusChangedEvent {
     description: string;
     type: string;
     status: string;
+    createAt?: string;
     user: {
       id: string;
       name: string;
       email: string;
     };
+    agent?: {
+      id: string;
+      name: string;
+      email: string;
+    } | null;
     channels?: string[];
   };
   oldStatus: string;
@@ -42,11 +54,17 @@ export interface TicketClosedEvent {
     description: string;
     type: string;
     status: string;
+    createAt?: string;
     user: {
       id: string;
       name: string;
       email: string;
     };
+    agent?: {
+      id: string;
+      name: string;
+      email: string;
+    } | null;
     channels?: string[];
   };
 }

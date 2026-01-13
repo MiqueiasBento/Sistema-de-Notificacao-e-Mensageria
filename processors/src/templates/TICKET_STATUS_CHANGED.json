@@ -1,7 +1,7 @@
 {
   "email": {
-    "title": "Status do seu ticket foi alterado",
-    "body": "\nOlá {{name}},\n\nO status do seu ticket de suporte foi alterado.\n\nTicket: #{{ticketId}}\nTítulo: {{title}}\nTipo: {{type}}\nStatus anterior: {{oldStatus}}\nNovo status: {{status}}\n\nAcesse o sistema para verificar as atualizações.\n"
+    "title": "Atualização: Status do seu ticket foi alterado",
+    "body": "\nOlá {{name}},\n\nInformamos que houve uma atualização no status do seu ticket de suporte.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nDETALHES DO TICKET\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nNúmero do Ticket: #{{ticketId}}\nTítulo: {{title}}\nDescrição: {{description}}\nTipo: {{type}}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nALTERAÇÃO DE STATUS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nStatus Anterior: {{oldStatus}}\n➡️ Novo Status: {{status}}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nData de Criação: {{createAt}}\nAgente Responsável: {{agentName}}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nAcesse o sistema para verificar todas as atualizações e acompanhar o progresso do seu ticket.\n\nAtenciosamente,\nEquipe de Suporte\n"
   },
   "push": {
     "title": "Status do ticket alterado",

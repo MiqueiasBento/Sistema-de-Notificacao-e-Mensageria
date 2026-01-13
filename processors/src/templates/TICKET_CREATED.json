@@ -1,10 +1,10 @@
 {
   "email": {
-    "title": "Seu ticket foi criado",
-    "body": "\nOlá {{name}},\n\nRecebemos sua solicitação de suporte.\n\nTicket: #{{ticketId}}\nTítulo: {{title}}\nTipo: {{type}}\n\nNossa equipe irá analisá-lo em breve.\n"
+    "title": "Seu ticket foi criado com sucesso",
+    "body": "\nOlá {{name}},\n\nRecebemos sua solicitação de suporte e ela foi registrada em nosso sistema.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nDETALHES DO TICKET\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nNúmero do Ticket: #{{ticketId}}\nTítulo: {{title}}\nDescrição: {{description}}\nTipo: {{type}}\nStatus: {{status}}\nData de Criação: {{createAt}}\nAgente Responsável: {{agentName}}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nNossa equipe irá analisar sua solicitação em breve e você receberá atualizações sobre o andamento.\n\nSe precisar de mais informações ou tiver dúvidas, não hesite em nos contatar.\n\nAtenciosamente,\nEquipe de Suporte\n"
   },
   "push": {
     "title": "Ticket criado",
-    "body": "Seu ticket #{{ticketId}} foi registrado com sucesso."
+    "body": "Seu ticket #{{ticketId}} foi registrado com sucesso. Nossa equipe irá analisá-lo em breve."
   }
 }
