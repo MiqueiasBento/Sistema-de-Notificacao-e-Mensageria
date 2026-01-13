@@ -73,7 +73,11 @@ export default function Home() {
           </span>
         </div>
         <button
-          onClick={() => setCurrentRole(null)}
+          onClick={() => {
+            localStorage.removeItem("role");
+            setCurrentRole(null);
+            window.location.href = "/";
+          }}
           className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 transition-colors"
         >
           <UserCircle2 className="w-4 h-4" />

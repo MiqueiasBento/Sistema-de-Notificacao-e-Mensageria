@@ -31,7 +31,7 @@ public class TicketService {
         ticket.setDescription(data.description());
         ticket.setType(data.type());
         ticket.setStatus(StatusTicket.PENDENTE);
-        ticket.setTitle(user.getName() + " -> Solicitaão de suporte do tipo: " + data.type().getValue());
+        ticket.setTitle(user.getName() + " -> Solicitação de suporte do tipo: " + data.type().getValue());
         ticket.setCreateAt(LocalDateTime.now());
 
         ticketRepository.save(ticket);

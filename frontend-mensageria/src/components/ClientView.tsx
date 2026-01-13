@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import { Plus, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import type { Ticket, TicketType } from "../types";
 import { TicketModal } from "./TicketModal";
-import {
-  getTickets,
-  createTicket,
-} from "../services/chamados";
+import { getTickets, createTicket } from "../services/chamados";
 
 export function ClientView() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedTicket, setExpandedTicket] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const userEmail = localStorage.getItem("email");
 
   useEffect(() => {
     loadTickets();
@@ -37,15 +35,6 @@ export function ClientView() {
     mensagem: string;
   }) {
     try {
-      const username = `${data.nome} ${data.sobrenome}`;
-      const email = data.email;
-      const type = data.tipo;
-      const description = data.mensagem;
-      alert(`Debug - criando chamado com:\n${JSON.stringify(
-        { username, email, type, description },
-        null,
-        2
-      )}`);
       const newTicket = await createTicket({
         username: `${data.nome} ${data.sobrenome}`,
         email: data.email,
@@ -136,79 +125,88 @@ export function ClientView() {
             </p>
           ) : (
             <div className="space-y-3">
-              {tickets.map((ticket) => (
-                <div
-                  key={ticket.id}
-                  className="border border-gray-200 rounded-lg overflow-hidden"
-                >
-                  <button
-                    onClick={() =>
-                      setExpandedTicket(
-                        expandedTicket === ticket.id ? null : ticket.id
-                      )
-                    }
-                    className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+              {tickets.map((ticket) => {
+                return (
+                  <div
+                    key={ticket.id}
+                    className="border border-gray-200 rounded-lg overflow-hidden"
                   >
-                    <div className="flex items-center gap-3 flex-1">
-                      <span className="text-gray-500 text-sm">
-                        #{ticket.id}
-                      </span>
-                      <span className="flex-1 text-left">
-                        {getTipoLabel(ticket.type)}
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs ${getStatusColor(
-                          ticket.status
-                        )}`}
-                      >
-                        {getStatusLabel(ticket.status)}
-                      </span>
-                    </div>
-                    {expandedTicket === ticket.id ? (
-                      <ChevronUp className="w-5 h-5 text-gray-400 ml-2" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-400 ml-2" />
-                    )}
-                  </button>
+                    <button
+                      onClick={() =>
+                        setExpandedTicket(
+                          expandedTicket === ticket.id ? null : ticket.id
+                        )
+                      }
+                      className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        <span className="text-gray-500 text-sm">
+                          #{ticket.id}
+                        </span>
 
-                  {expandedTicket === ticket.id && (
-                    <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-                      <div className="space-y-3">
-                        <div>
-                          <p className="text-sm text-gray-500">Solicitante</p>
-                          <p>{ticket.username}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">E-mail</p>
-                          <p>{ticket.email}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Descrição</p>
-                          <p className="text-gray-700">
-                            {ticket.description}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">
-                            Data de Abertura
-                          </p>
-                          <p>{formatDate(ticket.createdAt)}</p>
-                        </div>
-                        {ticket.respostaFechamento && (
+                        <span className="flex-1 text-left">
+                          {getTipoLabel(ticket.type)}
+                        </span>
+
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs ${getStatusColor(
+                            ticket.status
+                          )}`}
+                        >
+                          {getStatusLabel(ticket.status)}
+                        </span>
+                      </div>
+
+                      {expandedTicket === ticket.id ? (
+                        <ChevronUp className="w-5 h-5 text-gray-400 ml-2" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-gray-400 ml-2" />
+                      )}
+                    </button>
+
+                    {expandedTicket === ticket.id && (
+                      <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                        <div className="space-y-3">
                           <div>
-                            <p className="text-sm text-gray-500">
-                              Resposta de Fechamento
-                            </p>
+                            <p className="text-sm text-gray-500">Solicitante</p>
+                            <p>{ticket.userName}</p>
+                          </div>
+
+                          <div>
+                            <p className="text-sm text-gray-500">E-mail</p>
+                            <p>{userEmail}</p>
+                          </div>
+
+                          <div>
+                            <p className="text-sm text-gray-500">Descrição</p>
                             <p className="text-gray-700">
-                              {ticket.respostaFechamento}
+                              {ticket.description}
                             </p>
                           </div>
-                        )}
+
+                          <div>
+                            <p className="text-sm text-gray-500">
+                              Data de Abertura
+                            </p>
+                            <p>{formatDate(ticket.createAt)}</p>
+                          </div>
+
+                          {ticket.respostaFechamento && (
+                            <div>
+                              <p className="text-sm text-gray-500">
+                                Resposta de Fechamento
+                              </p>
+                              <p className="text-gray-700">
+                                {ticket.respostaFechamento}
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

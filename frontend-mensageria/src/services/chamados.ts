@@ -8,6 +8,10 @@ export interface CreateTicketDTO {
   description: string;
 }
 
+export interface UpdateTicketStatusDTO {
+  status: string;
+}
+
 export async function createTicket(data: CreateTicketDTO) {
   const response = await api.post<Ticket>("/tickets", data);
   return response.data;
@@ -20,5 +24,10 @@ export async function getTickets() {
 
 export async function getTicketById(id: string) {
   const response = await api.get<Ticket>(`/tickets/${id}`);
+  return response.data;
+}
+
+export async function updateTicketStatus(id: string, data: UpdateTicketStatusDTO) {
+  const response = await api.patch<Ticket>(`/tickets/${id}/status`, data);
   return response.data;
 }

@@ -21,6 +21,7 @@ export default function Login() {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("email", data.email);
 
       console.log("Login OK:", data);
 

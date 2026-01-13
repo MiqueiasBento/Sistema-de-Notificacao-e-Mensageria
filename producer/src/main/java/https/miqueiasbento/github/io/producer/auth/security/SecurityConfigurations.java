@@ -25,54 +25,55 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfigurations {
 
-    @Autowired
-    SecurityFilter securityFilter;
+        @Autowired
+        SecurityFilter securityFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .cors(Customizer.withDefaults()) // habilita o CORS
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers(HttpMethod.POST,
-                                "/auth/login",
-                                "/auth/register/**"
-                        ).permitAll()
-                        .requestMatchers(HttpMethod.GET,
-                                "/auth/test"
-                        ).permitAll()
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/h2-console/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+                return httpSecurity
+                                .cors(Customizer.withDefaults()) // habilita o CORS
+                                .csrf(AbstractHttpConfigurer::disable)
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                                                .requestMatchers(HttpMethod.POST,
+                                                                "/auth/login",
+                                                                "/auth/register/**")
+                                                .permitAll()
+                                                .requestMatchers(HttpMethod.GET,
+                                                                "/auth/test")
+                                                .permitAll()
+                                                .requestMatchers(
+                                                                "/swagger-ui/**",
+                                                                "/v3/api-docs/**",
+                                                                "/h2-console/**")
+                                                .permitAll()
+                                                .anyRequest().authenticated())
+                                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                                .build();
+        }
 
-    @Bean
-    public AuthenticationManager AuthenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationManager AuthenticationManager(AuthenticationConfiguration authenticationConfiguration)
+                        throws Exception {
+                return authenticationConfiguration.getAuthenticationManager();
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // origem do seu front-end
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(List.of("http://localhost:5173")); // origem do seu front-end
+                configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+                configuration.setAllowedHeaders(List.of("*"));
+                configuration.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
+                return source;
+        }
 }
