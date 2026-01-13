@@ -36,12 +36,10 @@ ContainerDb(rds, "Amazon RDS", "SQL Database", "Armazena dados do sistema") {
     Component(table_ids, "ProcessedEventIds Table", "Table", "Ids para idempotência")
 }
 
-System_Ext(cognito, "AWS Cognito", "Gerenciamento de Identidade")
 System_Ext(sqs, "AWS SQS", "Fila de Mensagens")
-System_Ext(ses, "AWS SES", "Envio de Emails")
+System_Ext(ses, "Nodemailer", "Envio de Emails")
 System_Ext(fcm, "Firebase (FCM)", "Envio de Push Notifications")
 
-Rel(spa, cognito, "Autentica usuário", "HTTPS")
 Rel(auth_comp, api_client, "Fornece Token JWT")
 
 Rel(api_client, auth_middleware, "Envia Requests com Token", "HTTPS/JSON")
@@ -68,7 +66,7 @@ Rel(template_loader, table_templates, "Busca Template")
 Rel(router_handler, email_proc, "Delega envio Email")
 Rel(router_handler, push_proc, "Delega envio Push")
 
-Rel(email_proc, ses, "Envia Email", "SMTP/API")
+Rel(email_proc, ses, "Envia Email", "SMTP")
 Rel(push_proc, fcm, "Envia Push", "HTTP/API")
 
 Rel(router_handler, del_logger, "Registra Status")

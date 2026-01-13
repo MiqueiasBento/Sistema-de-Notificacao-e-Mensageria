@@ -183,6 +183,7 @@ package "Notification Processor (Container)" {
         class EmailAdapter <<Infrastructure>> {
             + sendEmail(params)
         }
+        note right of EmailAdapter : Implementado com Nodemailer (SMTP)
         
         class FcmAdapter <<Infrastructure>> {
             + sendPush(params)

@@ -14,6 +14,7 @@ System_Boundary(system, "Notification System") {
   Container(obs, "Observability", "CloudWatch / X-Ray", "Fornece registros, métricas e rastreamento.")
 }
 System_Ext(auth, "Auth (Cognito / JWT)", "Serviço de autenticação")
+System_Ext(email, "Nodemailer", "Serviço de envio de e-mail")
 
 Rel(user, UI , "Visualiza e gerencia seus chamados.")
 Rel(UI, producer, "Solicita informações por meio de chamados.", "JSON/HTTPS")
@@ -22,5 +23,6 @@ Rel(sqs, notificationProcessor, "Aciona o processamento")
 Rel(notificationProcessor, db, "Lê e escreve em modelos e registros")
 Rel(notificationProcessor, obs, "Envia registros e métricas.")
 Rel(producer, auth, "Valida tokens / autenticação")
+Rel(notificationProcessor, email, "Envia e-mails", "SMTP")
 
 @enduml

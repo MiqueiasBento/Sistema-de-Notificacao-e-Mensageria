@@ -6,7 +6,7 @@ title Diagrama de Contexto (Nível 1) - Sistema de Notificação e Mensageria
 Person(user, "Usuário cliente", "Abre tickets e recebe notificações")
 Person(agent, "Agente / Técnico", "Atende e recebe notificações")
 Person(admin, "Administrador", "Gerencia templates, reprocessa falhas")
-System_Ext(emailProvider, "SES / SMTP", "Serviço de envio de e-mail")
+System_Ext(emailProvider, "Nodemailer / SMTP", "Serviço de envio de e-mail")
 System_Ext(pushProvider, "FCM / APNs", "Serviço de push")
 System_Ext(auth, "Auth (Cognito / JWT)", "Autenticação")
 System(system, "HelpDesk (Notificação e Mensageria)", "Sistema event-driven para notificações e mensageria. Veja docs. ")
@@ -14,7 +14,7 @@ System(system, "HelpDesk (Notificação e Mensageria)", "Sistema event-driven pa
 Rel(user, system, "Cria ticket / visualiza logs (HTTP)")
 Rel(agent, system, "Recebe notificações / usa Admin UI")
 Rel(admin, system, "Administra reenvios")
-Rel(system, emailProvider, "Envia e-mails via SES")
+Rel(system, emailProvider, "Envia e-mails via Nodemailer")
 Rel(system, pushProvider, "Envia push via FCM/APNs")
 Rel(system, auth, "Valida tokens / autenticação")
 
@@ -26,8 +26,8 @@ Note as N1
 End note
 
 Note as N2
-**Amazon SES:**
-O Amazon SES (Simple Email Service) é um serviço de nuvem da Amazon Web Services (AWS) que permite enviar e receber e-mails em grande volume de forma barata e escalável
+**Nodemailer:**
+Nodemailer é um módulo para aplicações Node.js que permite o envio de e-mails de forma simples e segura utilizando diferentes protocolos como SMTP.
 End note
 
 Note as N3
