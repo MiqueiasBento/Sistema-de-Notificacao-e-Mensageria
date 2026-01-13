@@ -1,0 +1,10 @@
+{
+  "email": {
+    "title": "Seu ticket foi fechado",
+    "body": "\nOlá {{name}},\n\nTemos o prazer de informar que seu ticket de suporte foi fechado.\n\nTicket: #{{ticketId}}\nTítulo: {{title}}\nTipo: {{type}}\n\nAgradecemos seu contato. Se precisar de mais ajuda, não hesite em nos contatar.\n"
+  },
+  "push": {
+    "title": "Ticket fechado",
+    "body": "Seu ticket #{{ticketId}} foi fechado com sucesso!"
+  }
+}
