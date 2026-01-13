@@ -133,29 +133,42 @@ package "Producer API (Container)" {
 
 package "Notification Processor (Container)" {
 
-    package "Router Component" {
-        class RouterHandler {
-            + handle(sqsEvent)
+    package "Messaging Layer" {
+        class SqsListener {
+            + pollMessages()
         }
 
-        class IdempotencyService {
-            + isProcessed(eventId)
+        class EventRouter {
+            + routeEvent(event)
+            + sendNotificationToChannels()
+        }
+
+        ' Relacionamentos Messaging
+        SqsListener ..> EventRouter : despacha
+    }
+
+    package "Domain Handlers" {
+        class TicketCreatedHandler {
+            + handleTicketCreated(event)
+        }
+        
+        class TicketStatusChangedHandler {
+            + handleTicketStatusChanged(event)
+        }
+    }
+
+    package "Core Services" {
+        class NotificationService {
+            + send(notification)
+            - fill(template, data)
         }
 
         class TemplateLoader {
-            + load(type)
+            + load(templateKey, channel)
         }
 
-        class NotificationEvent <<Domain>> {
-            + eventId: string
-            + recipient: string
-            + payload: object
-        }
-
-        ' Relacionamentos Router
-        RouterHandler ..> IdempotencyService : valida
-        RouterHandler ..> TemplateLoader : carrega dados
-        RouterHandler ..> NotificationEvent : parse <<consumes>>
+        ' Relacionamentos Core
+        NotificationService ..> TemplateLoader : usa
     }
 
     package "Channel Processors" {
@@ -193,8 +206,14 @@ package "Notification Processor (Container)" {
     }
 
     ' Relacionamentos entre componentes
-    RouterHandler ..> EmailProcessor : despacha
-    RouterHandler ..> PushProcessor : despacha
+    EventRouter ..> TicketCreatedHandler : invoca
+    EventRouter ..> TicketStatusChangedHandler : invoca
+    
+    TicketCreatedHandler ..> NotificationService : solicita envio
+    TicketStatusChangedHandler ..> NotificationService : solicita envio
+
+    NotificationService ..> EmailProcessor : despacha
+    NotificationService ..> PushProcessor : despacha
     
     ' Trataemnto de erros / Logs
     EmailProcessor ..> DeliveryLogger : log (success/error)
